@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { UserDocument } from "models/User.model";
 import { createUser, findUser, loginUser } from "service/user.service";
 import { logger } from "utils/logger";
 import { z } from "zod";
@@ -11,7 +12,7 @@ const userController = {
 
             res.status(200).json(user);
         } catch (error: any) {
-            res.status(500).json({ Error: error.message });
+            next(error);
         }
     },
 

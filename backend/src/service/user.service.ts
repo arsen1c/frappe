@@ -4,14 +4,17 @@ import UserModel, { UserDocument } from "models/User.model";
 import { logger } from "utils/logger";
 
 export async function findUser(username: string) {
-    try {
-        const user = await UserModel.findOne({ username });
-        // Reflect.deleteProperty(user, "password");
+    logger.info("Search for user");
+    const userRecord: UserDocument = await UserModel.findOne<UserDocument>({ username });
 
-        return { ...user };
-    } catch (error: any) {
-        throw new Error("Could not find the user.");
-    }
+    if (!userRecord) throw HttpErrorException.resourceNotFound("User not found");
+    logger.info("User found");
+
+    // Remove password property from the user object
+    const user = userRecord.toObject();
+    Reflect.deleteProperty(user, "password");
+
+    return user;
 }
 
 /* Add user to the database */
