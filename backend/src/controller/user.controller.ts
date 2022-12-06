@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
+import IssueModel from "models/Issue.model";
 import { UserDocument } from "models/User.model";
-import { createUser, findUser, loginUser } from "service/user.service";
+import { createUser, findUser, issueBook, loginUser } from "service/user.service";
 import { logger } from "utils/logger";
 import { z } from "zod";
 
@@ -59,6 +60,25 @@ const userController = {
             const user = await loginUser({ username, password });
 
             res.status(200).json(user);
+        } catch (error: any) {
+            next(error);
+        }
+    },
+
+    async getIssueBook(req: Request, res: Response, next: NextFunction) {
+        const { userid } = req.params;
+
+        const issues = await IssueModel.find({ "userId.id": userid });
+
+        res.status(200).json(issues);
+    },
+
+    async postIssueBook(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { bookid, userid } = req.body;
+            const resp = await issueBook(bookid, userid);
+
+            res.status(200).json(resp);
         } catch (error: any) {
             next(error);
         }

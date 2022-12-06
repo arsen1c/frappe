@@ -6,7 +6,7 @@ import { logger } from "utils/logger";
 
 /* User document interface */
 export interface UserDocument extends IUserInput, mongoose.Document {
-    booksIssued: mongoose.Schema.Types.ObjectId[];
+    booksIssued: mongoose.Types.ObjectId[];
     debt: number;
     isAdmin: boolean;
     createdAt: Date;
@@ -24,7 +24,7 @@ const UserSchema = new mongoose.Schema<UserDocument>({
     name: { type: String, required: true },
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    booksIssued: { type: [mongoose.Schema.Types.ObjectId], ref: "Book" },
+    booksIssued: { type: [mongoose.Types.ObjectId], ref: "Book" },
     debt: { type: Number, default: 0 },
     isAdmin: { type: Boolean, default: false }
 }, {

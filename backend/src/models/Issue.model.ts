@@ -6,6 +6,7 @@ const IssueSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Book',
         },
+        bookID: String,
         title: String,
         authors: String,
         average_rating: String,
@@ -24,7 +25,7 @@ const IssueSchema = new mongoose.Schema({
 
     userId: {
         id: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: mongoose.Types.ObjectId,
             ref: 'User',
         },
 

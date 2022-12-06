@@ -1,5 +1,7 @@
 import { HttpErrorException } from "exceptions/HttpErrorException";
 import { IUserInput } from "interfaces/user.interface";
+import BookModel from "models/Book.model";
+import Issue from "models/Issue.model";
 import UserModel, { UserDocument } from "models/User.model";
 import { logger } from "utils/logger";
 
@@ -49,4 +51,33 @@ export async function loginUser({ username, password }: { username: string, pass
     } catch (error: any) {
         throw new Error(error);
     }
+}
+
+export const issueBook = async (bookId: number, userId: string) => {
+    const book = await BookModel.findOne({ bookId });
+
+    if (!book) throw HttpErrorException.resourceNotFound("Book not found");
+    const user = await UserModel.findById(userId);
+    if (!user) throw HttpErrorException.resourceNotFound("User not found");
+
+    book.stock -= 1;
+    const issue = new Issue({
+        bookInfo: {
+            ...book,
+            stock: book.stock
+        },
+        userId: {
+            id: user._id,
+            username: user.username
+        }
+    })
+
+    // Push issue record on individual user document
+    user.booksIssued.push(book._id);
+
+    await issue.save();
+    await user.save();
+    await book.save();
+
+    return { success: true };
 }
