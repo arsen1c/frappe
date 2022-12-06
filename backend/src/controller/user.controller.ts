@@ -43,7 +43,6 @@ const userController = {
     /* Login user */
     async postUserLogin(req: Request, res: Response, next: NextFunction) {
         try {
-            throw new Error("LMAO")
             logger.info("Validating user input for login");
             const { username, password } = req.body;
 

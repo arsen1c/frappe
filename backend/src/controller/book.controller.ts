@@ -1,7 +1,7 @@
 import axios from "axios";
 import { NextFunction, Request, Response } from "express";
 import { IBook } from "interfaces/book.interface";
-import { importBooks } from "service/books.service";
+import { findBook, importBooks } from "service/books.service";
 
 export const bookController = {
     /* Fetch and add books from frappe api to the database */
@@ -13,8 +13,20 @@ export const bookController = {
                 }
             });
 
-            const response = await importBooks(message);
+            const response: IBook[] = await importBooks(message);
             res.status(201).json(response);
+        } catch (error: any) {
+            next(error);
+        }
+    },
+
+    /* Search for a book using it's title (Partial search enabled) */
+    async getBook(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { bookname } = req.params;
+            const bookRecord: IBook[] = await findBook(bookname);
+
+            res.status(200).json(bookRecord);
         } catch (error: any) {
             next(error);
         }

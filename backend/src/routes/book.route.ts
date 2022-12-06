@@ -4,5 +4,6 @@ const Router = express.Router();
 
 Router.get("/", (_req: Request, res: Response) => { res.status(200).send("ok") });
 Router.get("/import", bookController.getBooks);
+Router.get("/search/:bookname", bookController.getBook);
 
 export default Router;

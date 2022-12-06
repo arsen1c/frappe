@@ -17,4 +17,8 @@ export class HttpErrorException extends Error {
     static booksAlreaydImported() {
         return new HttpErrorException(409, "Books already imported");
     }
+
+    static resourceNotFound() {
+        return new HttpErrorException(404, "Not found");
+    }
 }
