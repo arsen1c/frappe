@@ -1,8 +1,10 @@
 import { HttpErrorException } from "exceptions/HttpErrorException";
+import { IIssue } from "interfaces/issue.interface";
 import { IUserInput } from "interfaces/user.interface";
 import BookModel from "models/Book.model";
 import Issue from "models/Issue.model";
 import UserModel, { UserDocument } from "models/User.model";
+import mongoose from "mongoose";
 import { logger } from "utils/logger";
 
 export async function findUser(username: string) {
@@ -60,6 +62,12 @@ export const issueBook = async (bookId: number, userId: string) => {
     const user = await UserModel.findById(userId);
     if (!user) throw HttpErrorException.resourceNotFound("User not found");
 
+    // Chekc if book is already issued to the user
+    const oldIssueRecord: IIssue[] = await Issue.find({ "userId.id": userId });
+
+    const alreadyIssued = oldIssueRecord.filter(record => record.bookInfo.bookID === bookId).length > 0;
+    if (alreadyIssued) throw HttpErrorException.alreadyExists("This issue already exists.")
+
     book.stock -= 1;
     const issue = new Issue({
         bookInfo: {
@@ -81,3 +89,4 @@ export const issueBook = async (bookId: number, userId: string) => {
 
     return { success: true };
 }
+

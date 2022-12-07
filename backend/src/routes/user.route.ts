@@ -6,7 +6,7 @@ Router.get("/", (req: Request, res: Response) => { res.status(200).send("ok") })
 Router.get("/:username", userController.getUser);
 Router.post("/create", userController.postUser);
 Router.post("/login", userController.postUserLogin);
-Router.get("/issue/:userid", userController.getIssueBook);
+Router.get("/issues/:userid", userController.getIssueBook);
 Router.post("/issue", userController.postIssueBook);
 
 export default Router;

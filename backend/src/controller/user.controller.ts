@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express";
 import IssueModel from "models/Issue.model";
-import { UserDocument } from "models/User.model";
 import { createUser, findUser, issueBook, loginUser } from "service/user.service";
 import { logger } from "utils/logger";
 import { z } from "zod";

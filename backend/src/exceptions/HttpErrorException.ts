@@ -21,4 +21,8 @@ export class HttpErrorException extends Error {
     static resourceNotFound(message: string = "Not found") {
         return new HttpErrorException(404, message);
     }
+
+    static alreadyExists(message: string = "Alreay exists") {
+        return new HttpErrorException(403, message);
+    }
 }
