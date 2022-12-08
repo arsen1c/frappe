@@ -4,7 +4,8 @@
     "target": "ESNext",
     "lib": [
       "ESNext",
-      "esnext.asynciterable"
+      "esnext.asynciterable",
+      "DOM"
     ],
     "typeRoots": [
       "node_modules/@types"
@@ -18,7 +19,7 @@
     "pretty": true,
     "sourceMap": false,
     "declaration": true,
-    "outDir": "./build",
+    "outDir": "./dist",
     "allowJs": true,
     "noEmit": false,
     "esModuleInterop": true,

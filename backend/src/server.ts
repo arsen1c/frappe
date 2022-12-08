@@ -1,10 +1,10 @@
 import * as dotenv from "dotenv";
 import express from "express";
 import morgan from "morgan";
-import { logger } from "./src/utils/logger";
-import { UserRoutes, BookRoutes } from "./src/routes/";
+import { logger } from "./utils/logger";
+import { UserRoutes, BookRoutes } from "./routes/";
 import mongoose from "mongoose";
-import { errorHandler } from "./src/middleware/error.middleware";
+import { errorHandler } from "./middleware/error.middleware";
 import cors from "cors";
 
 // load config files
