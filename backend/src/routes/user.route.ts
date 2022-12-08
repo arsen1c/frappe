@@ -8,5 +8,6 @@ Router.post("/create", userController.postUser);
 Router.post("/login", userController.postUserLogin);
 Router.get("/issues/:userid", userController.getIssueBook);
 Router.post("/issue", userController.postIssueBook);
+Router.delete("/issue", userController.deleteIssueBook);
 
 export default Router;

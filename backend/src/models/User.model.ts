@@ -24,7 +24,7 @@ const UserSchema = new mongoose.Schema<UserDocument>({
     name: { type: String, required: true },
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    booksIssued: { type: [mongoose.Types.ObjectId], ref: "Book" },
+    booksIssued: { type: [mongoose.Types.ObjectId], ref: "Issue" },
     debt: { type: Number, default: 0 },
     isAdmin: { type: Boolean, default: false }
 }, {

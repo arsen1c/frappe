@@ -1,9 +1,7 @@
 import mongoose from "mongoose";
 import { IIssue } from "../interfaces/issue.interface";
 
-export interface IssueSchema extends IIssue, mongoose.Document { };
-
-const IssueSchema = new mongoose.Schema<IssueSchema>({
+const IssueSchema = new mongoose.Schema<IIssue>({
     bookInfo: {
         id: {
             type: mongoose.Schema.Types.ObjectId,
@@ -36,4 +34,4 @@ const IssueSchema = new mongoose.Schema<IssueSchema>({
     },
 });
 
-export default mongoose.model<IssueSchema>("Issue", IssueSchema);
+export default mongoose.model<IIssue>("Issue", IssueSchema);

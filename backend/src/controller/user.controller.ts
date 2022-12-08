@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import IssueModel from "models/Issue.model";
-import { createUser, findUser, issueBook, loginUser } from "service/user.service";
+import mongoose from "mongoose";
+import { createUser, findUser, issueBook, loginUser, removeIssueBook } from "service/user.service";
 import { logger } from "utils/logger";
 import { z } from "zod";
 
@@ -74,10 +75,21 @@ const userController = {
 
     async postIssueBook(req: Request, res: Response, next: NextFunction) {
         try {
-            const { bookid, userid } = req.body;
+            const { bookid, userid }: { bookid: number, userid: mongoose.Types.ObjectId } = req.body;
             const resp = await issueBook(bookid, userid);
 
             res.status(200).json(resp);
+        } catch (error: any) {
+            next(error);
+        }
+    },
+
+    async deleteIssueBook(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { issueid, userid } = req.body;
+            await removeIssueBook(issueid, userid);
+
+            res.status(202).send();
         } catch (error: any) {
             next(error);
         }

@@ -1,4 +1,5 @@
 import { HttpErrorException } from "exceptions/HttpErrorException";
+import { IBook } from "interfaces/book.interface";
 import { IIssue } from "interfaces/issue.interface";
 import { IUserInput } from "interfaces/user.interface";
 import BookModel from "models/Book.model";
@@ -36,6 +37,7 @@ export async function createUser({ name, password, username }: IUserInput) {
     }
 }
 
+/* User login */
 export async function loginUser({ username, password }: { username: string, password: string }) {
     try {
         const userRecord = await UserModel.findOne<UserDocument>({ username });
@@ -55,20 +57,24 @@ export async function loginUser({ username, password }: { username: string, pass
     }
 }
 
-export const issueBook = async (bookId: number, userId: string) => {
-    const book = await BookModel.findOne({ bookId });
-
+/* Issue new book to the user */
+export const issueBook = async (bookID: number, userId: mongoose.Types.ObjectId): Promise<IBook> => {
+    const book = await BookModel.findOne({ bookID });
     if (!book) throw HttpErrorException.resourceNotFound("Book not found");
     const user = await UserModel.findById(userId);
     if (!user) throw HttpErrorException.resourceNotFound("User not found");
 
-    // Chekc if book is already issued to the user
+    logger.info("Checking if book is already assigned to the user.")
     const oldIssueRecord: IIssue[] = await Issue.find({ "userId.id": userId });
+    // Check if book is already issued to the user
+    const alreadyIssued = oldIssueRecord.filter(record => record.bookInfo.bookID === bookID).length > 0;
+    if (alreadyIssued) throw HttpErrorException.alreadyExists("This issue already exists.");
 
-    const alreadyIssued = oldIssueRecord.filter(record => record.bookInfo.bookID === bookId).length > 0;
-    if (alreadyIssued) throw HttpErrorException.alreadyExists("This issue already exists.")
+    logger.info("Issuing new book.");
 
+    // Decrement stock
     book.stock -= 1;
+
     const issue = new Issue({
         bookInfo: {
             ...book,
@@ -81,12 +87,44 @@ export const issueBook = async (bookId: number, userId: string) => {
     })
 
     // Push issue record on individual user document
-    user.booksIssued.push(book._id);
+    user.booksIssued.push(issue._id);
 
+    logger.info("Saving data");
+    await book.save();
     await issue.save();
     await user.save();
+    logger.info("Book issued succesfully");
+
+    return book;
+}
+
+/* Delete issue */
+export const removeIssueBook = async (issueId: string, userId: string) => {
+    const issue = await Issue.findOne({ _id: issueId });
+    if (!issue) throw HttpErrorException.resourceNotFound("Invalid issue ID");
+    if (!(issue.userId.id == userId)) throw HttpErrorException.resourceNotFound("Mismatching of IssueId and UserId");
+
+    const user = await UserModel.findById(userId);
+    if (!user) throw HttpErrorException.resourceNotFound("User not found");
+    logger.info("IssueId and UserId matched.");
+
+    const book = await BookModel.findOne({ "bookID": issue.bookInfo.bookID });
+    // increase book stock by 1
+    book.stock += 1;
+    // Delete issue
+    await Issue.deleteOne({ _id: issueId });
+
+    // Remove issue from user document's issuedBooks array
+    await UserModel.updateOne(
+        { _id: userId },
+        {
+            "$pull": { "booksIssued": { "$in": [issueId] } }
+        },
+    )
+
     await book.save();
 
+    logger.info("Issue removed succesfully");
     return { success: true };
 }
 
