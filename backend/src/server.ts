@@ -2,7 +2,7 @@ import * as dotenv from "dotenv";
 import express from "express";
 import morgan from "morgan";
 import { logger } from "./utils/logger";
-import { UserRoutes, BookRoutes } from "./routes/";
+import { UserRoutes, BookRoutes, IssueRoutes } from "./routes/";
 import mongoose from "mongoose";
 import { errorHandler } from "./middleware/error.middleware";
 import cors from "cors";
@@ -28,6 +28,7 @@ app.use(
 app.use(express.json());
 app.use("/user", UserRoutes);
 app.use("/book", BookRoutes);
+app.use("/issue", IssueRoutes);
 app.use(errorHandler);
 
 app.listen(PORT, () => {
