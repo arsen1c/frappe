@@ -1,5 +1,6 @@
-import { ColorScheme, MantineProvider, Text } from "@mantine/core"
+import { ColorScheme, ColorSchemeProvider, MantineProvider, Text } from "@mantine/core"
 import { useLocalStorage } from "@mantine/hooks"
+import AppShell from "./components/Layout/AppShell"
 
 function App() {
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
@@ -12,10 +13,10 @@ function App() {
       theme={{
         fontFamily: 'Open Sans, sans serif',
         spacing: { xs: 15, sm: 20, md: 25, lg: 30, xl: 40 },
-        colorScheme: 'dark'
+        // colorScheme: 'dark'
       }}
     >
-      <Text>Hello World!</Text>
+      <AppShell />
     </MantineProvider>
   )
 }
