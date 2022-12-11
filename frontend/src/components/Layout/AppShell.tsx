@@ -11,7 +11,7 @@ import {
     ThemeIcon,
 } from '@mantine/core';
 import TableExample from '../Elements/Table/Table';
-import MainNavbar from './Navbar';
+import MainNavbar from '../Navbar/Navbar';
 // import Home from '../Home/Home';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { IconBooks } from '@tabler/icons';

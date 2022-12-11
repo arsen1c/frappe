@@ -1,4 +1,4 @@
-import { ColorScheme, ColorSchemeProvider, MantineProvider, Text } from "@mantine/core"
+import { ColorScheme, MantineProvider } from "@mantine/core"
 import { useLocalStorage } from "@mantine/hooks"
 import AppShell from "./components/Layout/AppShell"
 import NotFound from "./components/Elements/NotFound/NotFound"

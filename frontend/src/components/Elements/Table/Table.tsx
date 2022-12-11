@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import {
-    createStyles,
     Table,
     ScrollArea,
     UnstyledButton,
@@ -11,28 +10,7 @@ import {
 } from '@mantine/core';
 import { keys } from '@mantine/utils';
 import { IconSelector, IconChevronDown, IconChevronUp, IconSearch } from '@tabler/icons';
-
-const useStyles = createStyles((theme) => ({
-    th: {
-        padding: '0 !important',
-    },
-
-    control: {
-        width: '100%',
-        padding: `${theme.spacing.xs}px ${theme.spacing.md}px`,
-
-        '&:hover': {
-            backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
-        },
-    },
-
-    icon: {
-        width: 21,
-        height: 21,
-        borderRadius: 21,
-    },
-}));
-
+import { useStyles } from './style';
 interface RowData {
     name: string;
     email: string;
