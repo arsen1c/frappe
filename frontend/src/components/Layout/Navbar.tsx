@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { createStyles, Navbar, Group, Code } from '@mantine/core';
+import { createStyles, Navbar } from '@mantine/core';
 import {
     IconUser,
     IconHome,
@@ -66,7 +66,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
 
 const data = [
     { link: '/', label: 'Home', icon: IconHome },
-    { link: 'user', label: 'User', icon: IconUser }
+    { link: '/user', label: 'User', icon: IconUser }
 ];
 
 export default function NavbrarExample() {
