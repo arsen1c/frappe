@@ -4,7 +4,6 @@ import AppShell from "./components/Layout/AppShell"
 import NotFound from "./components/Elements/NotFound/NotFound"
 import { BrowserRouter as Router, Routes, Route, Link, Outlet } from "react-router-dom"
 import TableExample from './components/Elements/Table/Table';
-import userData from './data/users.json';
 import User from "./components/Elements/User/User"
 
 function App() {
@@ -18,14 +17,14 @@ function App() {
       theme={{
         fontFamily: 'Open Sans, sans serif',
         spacing: { xs: 15, sm: 20, md: 25, lg: 30, xl: 40 },
-        colorScheme: colorScheme
+        colorScheme: colorScheme,
       }}
     >
       <Router>
         <Routes>
           {/* Routes with AppShellExmaple layout */}
           <Route element={<AppShell ><Outlet /></AppShell>}>
-            <Route path="/" element={<TableExample data={userData.data} />} />
+            <Route path="/" element={<TableExample />} />
             <Route path="/user" element={< User />} />
             <Route />
           </Route>

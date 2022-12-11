@@ -59,7 +59,9 @@ export default function AccountMenu() {
                 </Menu.Target>
                 <Menu.Dropdown my={-9}>
                     <Menu.Label>Options</Menu.Label>
-                    <Menu.Item icon={<IconSettings size={14} to="/settings" />}><Link to="/user"><Text variant='text'>Settings</Text></Link></Menu.Item>
+                    <Link to="/user" style={{ textDecoration: "none" }}>
+                        <Menu.Item icon={<IconSettings size={14} to="/settings" />}>Settings</Menu.Item>
+                    </Link>
                     <Menu.Item color="red" icon={<IconTrash size={14} />}>Logout</Menu.Item>
                 </Menu.Dropdown>
             </Menu>

@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import { useState } from 'react';
 import {
     AppShell,
     Navbar,
@@ -8,15 +8,11 @@ import {
     Burger,
     useMantineTheme,
     Group,
-    ThemeIcon,
+    ActionIcon,
+    useMantineColorScheme,
 } from '@mantine/core';
-import TableExample from '../Elements/Table/Table';
 import MainNavbar from '../Navbar/Navbar';
-// import Home from '../Home/Home';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { IconBooks } from '@tabler/icons';
-import usersData from "../../data/users.json";
-import User from '../Elements/User/User';
+import { IconBooks, IconMoonStars, IconSun } from '@tabler/icons';
 
 interface PropType {
     children: JSX.Element | JSX.Element[];
@@ -53,7 +49,6 @@ export default function AppShellExample({ children, ...props }: PropType) {
                                 mr="xl"
                             />
                         </MediaQuery>
-
                         <Group>
                             <IconBooks size={35} />
                             <Text weight={"bold"} size={25}>Frapbrary</Text>
@@ -62,10 +57,6 @@ export default function AppShellExample({ children, ...props }: PropType) {
                 </Header>
             }
         >
-            {/* <Routes>
-                <Route path='/' element={<TableExample data={usersData.data} />} />
-                <Route path='/user' element={<User />} />
-            </Routes> */}
             {children}
         </AppShell>
     );
