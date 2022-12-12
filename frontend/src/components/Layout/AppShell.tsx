@@ -8,11 +8,9 @@ import {
     Burger,
     useMantineTheme,
     Group,
-    ActionIcon,
-    useMantineColorScheme,
 } from '@mantine/core';
 import MainNavbar from '../Navbar/Navbar';
-import { IconBooks, IconMoonStars, IconSun } from '@tabler/icons';
+import { IconBooks } from '@tabler/icons';
 
 interface PropType {
     children: JSX.Element | JSX.Element[];
@@ -32,7 +30,7 @@ export default function AppShellExample({ children, ...props }: PropType) {
             navbarOffsetBreakpoint="sm"
             asideOffsetBreakpoint="sm"
             navbar={
-                <Navbar p="md" hiddenBreakpoint="sm" hidden={!opened} width={{ sm: 200, lg: 300 }}>
+                <Navbar p="md" hiddenBreakpoint="lg" hidden={!opened} width={{ lg: 300 }}>
                     {/* <Text>Application navbar</Text> */}
                     <MainNavbar />
                 </Navbar>
@@ -40,7 +38,7 @@ export default function AppShellExample({ children, ...props }: PropType) {
             header={
                 <Header height={{ base: 70, md: 70 }} p="md">
                     <div style={{ display: "flex", height: '100%' }}>
-                        <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
+                        <MediaQuery largerThan="lg" styles={{ display: 'none' }}>
                             <Burger
                                 opened={opened}
                                 onClick={() => setOpened((o) => !o)}
