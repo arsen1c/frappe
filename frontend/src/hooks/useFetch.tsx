@@ -30,7 +30,7 @@ export interface IIssue {
 }
 
 export const useFetch = (endpoint: string) => {
-    const [data, setData] = useState<Array<IIssue>>([]);
+    const [data, setData] = useState([]);
     const [isPending, setIsPending] = useState(true);
     const [error, setError] = useState("");
 

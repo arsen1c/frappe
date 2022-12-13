@@ -7,6 +7,7 @@ import User from "./components/Elements/User/User"
 import Home from "./components/Home/Home"
 import { useState } from "react"
 import { useTheme } from "@emotion/react"
+import Books from "./components/Books/Books"
 
 function App() {
   // const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
@@ -34,6 +35,7 @@ function App() {
             <Route element={<AppShell ><Outlet /></AppShell>}>
               <Route path="/" element={<Home />} />
               <Route path="/user" element={< User />} />
+              <Route path="/books" element={< Books />} />
               <Route />
             </Route>
 

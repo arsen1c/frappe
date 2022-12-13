@@ -5,6 +5,7 @@ import {
     IconHome,
     IconBrandGithub,
     IconBrandLinkedin,
+    IconBook2,
 } from '@tabler/icons';
 import { Link } from 'react-router-dom';
 import AccountMenu from '../Elements/Menu/AccountMenu';
@@ -13,7 +14,8 @@ import { useStyles } from './style';
 
 const data = [
     { link: '/', label: 'Home', icon: IconHome },
-    { link: '/user', label: 'User', icon: IconUser }
+    { link: '/user', label: 'User', icon: IconUser },
+    { link: '/books', label: 'Books', icon: IconBook2 }
 ];
 
 export default function NavbrarExample() {
