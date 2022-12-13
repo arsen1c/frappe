@@ -11,20 +11,31 @@ import {
     Center,
     Modal,
     Button,
+    Notification,
+    useMantineColorScheme,
 } from '@mantine/core';
-import { IconPencil, IconTrash } from '@tabler/icons';
+import { IconCheck, IconPencil, IconTrash } from '@tabler/icons';
 import { useState } from 'react';
 import { IIssue, useFetch } from '../../../hooks/useFetch';
 
 
+const NotificationComponent = () => {
+    return (
+        <Notification icon={<IconCheck size={20} />} title="We notify you that">
+            You are now obligated to give a star to Mantine project on GitHub
+        </Notification>
+    )
+}
+
 function ModalContent({ issueId }: { issueId: string }) {
     return (
-        <Button color={"red"}>Delete</Button>
+        <Button color={"red"} onClick={NotificationComponent}>Delete</Button>
     )
 }
 
 export default function IssuesTable() {
     const theme = useMantineTheme();
+    const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
     const { data, error, isPending } = useFetch("/issue/all");
     const [deleteModal, setDeleteModal] = useState({ opened: false, issueId: "" });
@@ -44,7 +55,7 @@ export default function IssuesTable() {
             </td>
 
             <td>
-                <Anchor<'a'> size="sm" weight={800} href={`/user${item.userId.username}`}>
+                <Anchor<'a'> size="sm" weight={800} href={`/user/${item.userId.username}`}>
                     {item.userId.username}
                 </Anchor>
             </td>
@@ -77,7 +88,7 @@ export default function IssuesTable() {
             {(data && !isPending) &&
                 <Center style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
                     <Modal centered opened={deleteModal.opened} withCloseButton={true} title={`Delete issue ${deleteModal.issueId}`} size="auto" onClose={() => setDeleteModal({ opened: false, issueId: "" })}>{<ModalContent issueId={"LMA"} />}</Modal>
-                    <Button>New Issue</Button>
+                    <Button onClick={() => toggleColorScheme()}>New Issue</Button>
                     <Table highlightOnHover sx={{ minWidth: 800, maxHeight: "1px" }} verticalSpacing="xs">
                         <thead>
                             <tr>

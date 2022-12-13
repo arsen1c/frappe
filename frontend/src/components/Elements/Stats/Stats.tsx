@@ -20,8 +20,8 @@ export default function StatsRing({ data }: StatsRingProps) {
     const stats = data.map((stat) => {
         const Icon = icons[stat.icon];
         return (
-            <Paper withBorder radius="md" p="xs" key={stat.label}>
-                <Group>
+            <Paper withBorder radius="md" p="xs" shadow={"sm"} key={stat.label} >
+                <Group >
                     <RingProgress
                         size={80}
                         roundCaps
@@ -43,7 +43,7 @@ export default function StatsRing({ data }: StatsRingProps) {
                         </Text>
                     </div>
                 </Group>
-            </Paper>
+            </Paper >
         );
     });
     return (

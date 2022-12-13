@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { Navbar } from '@mantine/core';
+import { ActionIcon, Group, Navbar } from '@mantine/core';
 import {
     IconUser,
     IconHome,
+    IconBrandGithub,
+    IconBrandLinkedin,
 } from '@tabler/icons';
 import { Link } from 'react-router-dom';
 import AccountMenu from '../Elements/Menu/AccountMenu';
@@ -40,6 +42,14 @@ export default function NavbrarExample() {
 
             <Navbar.Section className={classes.footer}>
                 <AccountMenu />
+                <Group>
+                    <ActionIcon size="lg">
+                        <IconBrandGithub href='www.youtube.com' size={40} stroke={1.5} />
+                    </ActionIcon>
+                    <ActionIcon size="lg">
+                        <IconBrandLinkedin href='www.youtube.com' size={40} stroke={1.5} />
+                    </ActionIcon>
+                </Group>
             </Navbar.Section>
         </Navbar>
     );

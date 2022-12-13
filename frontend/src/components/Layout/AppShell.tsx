@@ -8,15 +8,13 @@ import {
     Burger,
     useMantineTheme,
     Group,
+    Footer
 } from '@mantine/core';
 import MainNavbar from '../Navbar/Navbar';
 import { IconBooks } from '@tabler/icons';
+import LayoutProp from "../../interfaces/LayoutProps.interface";
 
-interface PropType {
-    children: JSX.Element | JSX.Element[];
-}
-
-export default function AppShellExample({ children, ...props }: PropType) {
+export default function AppShellExample({ children, ...props }: LayoutProp) {
     const theme = useMantineTheme();
     const [opened, setOpened] = useState(false);
     return (
@@ -54,6 +52,7 @@ export default function AppShellExample({ children, ...props }: PropType) {
                     </div>
                 </Header>
             }
+
         >
             {children}
         </AppShell>
