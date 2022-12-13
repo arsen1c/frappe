@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import IssueModel from "models/Issue.model";
+import { UserDocument } from "models/User.model";
 import mongoose from "mongoose";
-import { createUser, findUser, issueBook, loginUser, removeIssueBook } from "service/user.service";
+import { createUser, findAllUsers, findUser, issueBook, loginUser, removeIssueBook } from "service/user.service";
 import { logger } from "utils/logger";
 import { z } from "zod";
 
@@ -12,6 +13,15 @@ const userController = {
             const user = await findUser(username);
 
             res.status(200).json(user);
+        } catch (error: any) {
+            next(error);
+        }
+    },
+
+    async getAllUsers(freq: Request, res: Response, next: NextFunction) {
+        try {
+            const users: UserDocument[] = await findAllUsers();
+            res.status(200).json(users);
         } catch (error: any) {
             next(error);
         }

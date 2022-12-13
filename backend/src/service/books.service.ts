@@ -10,6 +10,11 @@ export const importBooks = async (books: Array<IBook>): Promise<Array<IBook>> =>
     return await BookModel.insertMany(books);
 }
 
+/* Fetch all books */
+export const fetchAllBooks = async (): Promise<Array<IBook>> => {
+    return await BookModel.find({});
+}
+
 export const findBook = async (bookName: string): Promise<Array<IBook>> => {
     logger.info("Looking for book")
     // Find books from their title. Partial search enabled.

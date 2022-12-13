@@ -1,7 +1,7 @@
 import axios from "axios";
 import { NextFunction, Request, Response } from "express";
 import { IBook } from "interfaces/book.interface";
-import { findBook, importBooks } from "service/books.service";
+import { fetchAllBooks, findBook, importBooks } from "service/books.service";
 
 export const bookController = {
     /* Fetch and add books from frappe api to the database */
@@ -15,6 +15,15 @@ export const bookController = {
 
             const response: IBook[] = await importBooks(message);
             res.status(201).json(response);
+        } catch (error: any) {
+            next(error);
+        }
+    },
+
+    async getAllBooks(req: Request, res: Response, next: NextFunction) {
+        try {
+            const books: IBook[] = await fetchAllBooks();
+            res.status(200).json(books);
         } catch (error: any) {
             next(error);
         }

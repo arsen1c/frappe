@@ -22,6 +22,11 @@ export async function findUser(username: string) {
     return user;
 }
 
+export async function findAllUsers(): Promise<Array<UserDocument>> {
+    return await UserModel.find();
+
+}
+
 /* Add user to the database */
 export async function createUser({ name, password, username }: IUserInput) {
     try {
