@@ -16,7 +16,6 @@ export const useStyles = createStyles((theme, _params, getRef) => {
             borderTop: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[2]}`,
             display: "flex",
             flexDirection: "column",
-            justifyContent: "center",
             alignItems: "center"
         },
 

@@ -2,6 +2,7 @@ import { forwardRef } from 'react';
 import { IconChevronRight, IconSettings, IconSearch, IconPhoto, IconMessageCircle, IconTrash, IconArrowsLeftRight } from '@tabler/icons';
 import { Group, Avatar, Text, Menu, UnstyledButton } from '@mantine/core';
 import { Link } from 'react-router-dom';
+import { ThemeToggleButton } from '../ThemeToggle/ThemeToggleButton';
 
 interface UserButtonProps extends React.ComponentPropsWithoutRef<'button'> {
     image: string;
@@ -62,9 +63,10 @@ export default function AccountMenu() {
                     <Link to="/user" style={{ textDecoration: "none" }}>
                         <Menu.Item icon={<IconSettings size={14} to="/settings" />}>Settings</Menu.Item>
                     </Link>
+                    <Menu.Divider />
                     <Menu.Item color="red" icon={<IconTrash size={14} />}>Logout</Menu.Item>
                 </Menu.Dropdown>
             </Menu>
-        </Group>
+        </Group >
     );
 }

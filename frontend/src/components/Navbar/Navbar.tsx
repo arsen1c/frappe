@@ -10,6 +10,7 @@ import {
 import { Link } from 'react-router-dom';
 import AccountMenu from '../Elements/Menu/AccountMenu';
 import { useStyles } from './style';
+import { ThemeToggleButton } from '../Elements/ThemeToggle/ThemeToggleButton';
 
 
 const data = [
@@ -40,6 +41,7 @@ export default function NavbrarExample() {
         <Navbar height={700} width={{ sm: 300 }} p="md">
             <Navbar.Section grow>
                 {links}
+                <ThemeToggleButton />
             </Navbar.Section>
 
             <Navbar.Section className={classes.footer}>

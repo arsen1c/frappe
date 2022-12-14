@@ -3,26 +3,25 @@ import {
     AppShell,
     Navbar,
     Header,
-    Text,
     MediaQuery,
     Burger,
     useMantineTheme,
-    Group,
-    Footer
+    useMantineColorScheme,
+    Title
 } from '@mantine/core';
 import MainNavbar from '../Navbar/Navbar';
-import { IconBooks } from '@tabler/icons';
 import LayoutProp from "../../interfaces/LayoutProps.interface";
 
 export default function AppShellExample({ children, ...props }: LayoutProp) {
     const theme = useMantineTheme();
     const [opened, setOpened] = useState(false);
+    const { colorScheme, toggleColorScheme } = useMantineColorScheme();
     return (
         <AppShell
             styles={{
                 main: {
                     // background: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0],
-                    color: theme.colorScheme === 'dark' ? "white" : "black"
+                    color: theme.colorScheme === 'dark' ? "white" : theme.colors.dark[4]
                 },
             }}
             navbarOffsetBreakpoint="sm"
@@ -34,22 +33,27 @@ export default function AppShellExample({ children, ...props }: LayoutProp) {
                 </Navbar>
             }
             header={
-                <Header height={{ base: 70, md: 70 }} p="md">
-                    <div style={{ display: "flex", height: '100%' }}>
-                        <MediaQuery largerThan="lg" styles={{ display: 'none' }}>
-                            <Burger
-                                opened={opened}
-                                onClick={() => setOpened((o) => !o)}
-                                size="sm"
-                                color={theme.colors.gray[6]}
-                                mr="xl"
-                            />
-                        </MediaQuery>
-                        <Group>
-                            <IconBooks size={35} />
-                            <Text weight={"bold"} size={25}>Frapbrary</Text>
-                        </Group>
-                    </div>
+                <Header height={{ base: 70, md: 70 }} p="md" sx={{ display: "flex", alignItems: "center" }}>
+                    <MediaQuery largerThan="lg" styles={{ display: 'none' }}>
+                        <Burger
+                            opened={opened}
+                            onClick={() => setOpened((o) => !o)}
+                            size="sm"
+                            color={theme.colors.gray[6]}
+                            mr="xl"
+                            sx={{
+                                position: "absolute",
+                                right: 0,
+                            }}
+                        />
+                    </MediaQuery>
+
+                    <Title
+                        size="h2"
+                        color={"blue"}
+                    >
+                        Frapbrary
+                    </Title>
                 </Header>
             }
 
