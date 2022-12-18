@@ -15,7 +15,7 @@ import {
 } from '@mantine/core';
 import { IconPencil, IconTrash } from '@tabler/icons';
 import { useEffect, useState } from 'react';
-import IIssue from '../../../interfaces/Issue.interface';
+import { IIssue } from '../../../interfaces/Issue.interface';
 import { deleteRequest, getRequest } from '../../../utils/AxiosInstance';
 import { IBook } from "../../../interfaces/Book.interface";
 import IssueModal from '../Modals/IssueModal';
@@ -45,7 +45,10 @@ export default function IssuesTable() {
     // const { data, error, isPending } = useFetch("/issue/all");
     // const {{}useIssuesContext();
     // const [data, setData] = useState<Array<IIssue>>([]);
-    const { issues, newIssue } = useIssueStore();
+    const { issues, newIssue, removeIssue, fetchIssues } = useIssueStore();
+
+
+
     const [isPending, setIsPending] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
 
@@ -55,25 +58,10 @@ export default function IssuesTable() {
     const [editModalOpened, setEditModalOpened] = useState(false);
     const [issueModalOpen, setIssueModalOpen] = useState(false);
 
-    // const [issues, setIssues] = useState<IIssue[]>([]);
-
     useEffect(() => {
-        const fetchIssues = async (): Promise<void> => {
-            return getRequest("/issue/all")
-                .then(({ data }: { data: IIssue[] }) => {
-                    setIsPending(false);
-                    setError("");
-                    newIssue(data.map(issue => issue));
-                }).catch(error => {
-                    setIsPending(false);
-                    setError(error.message);
-                    newIssue([]);
-                })
-        }
-
         fetchIssues();
+    }, [])
 
-    }, []);
 
     function deleteIssue(issueId: string, userId: string) {
         deleteRequest("/user/issue", {
@@ -82,8 +70,9 @@ export default function IssuesTable() {
                 userid: userId
             }
         }).then(res => {
-            // const newIssues = issues.filter(issue => issue._id !== issueId);
+            // const newIssues = issues.filter(issue(issue => issue._id !== issueId)) => issue._id !== issueId);
             // newIssue([...newIssues]);
+            removeIssue(issueId, userId);
         }).catch(err => {
             console.log(err);
             // error =  
@@ -114,6 +103,11 @@ export default function IssuesTable() {
             </td>
             <td>
                 <Text size="sm" color="dimmed">
+                    {String(new Date(item.bookInfo.issueDate).toLocaleDateString())}
+                </Text>
+            </td>
+            <td>
+                <Text size="sm" color="dimmed">
                     {String(new Date(item.bookInfo.returnDate).toLocaleDateString())}
                 </Text>
             </td>
@@ -140,7 +134,7 @@ export default function IssuesTable() {
             <Title>Ongoing issues</Title>
             <Button onClick={() => setIssueModalOpen(true)}>New issue</Button>
             <ScrollArea my={50}>
-                {isPending && <Center style={{ margin: 100 }}><Loader variant='dots' size={"xl"} /></Center>}
+                {/* {isPending && <Center style={{ margin: 100 }}><Loader variant='dots' size={"xl"} /></Center>} */}
                 {error && <Text color={"red"}>Couldn't fetch issues: {error}</Text>}
                 {(issues && !isPending) &&
                     <Center style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
@@ -148,7 +142,7 @@ export default function IssuesTable() {
                             <Button color={"red"} onClick={() => deleteIssue(issueIdSelected, userIdSelected)}>Delete</Button>
                         }
                         </Modal>
-                        {/* <IssueModal isOpened={issueModalOpen} setIsOpened={setIssueModalOpen} setData={newIssue} /> */}
+                        <IssueModal isOpened={issueModalOpen} setIsOpened={setIssueModalOpen} />
                         <Table highlightOnHover sx={{ minWidth: 800, maxHeight: "1px" }} verticalSpacing="xs">
                             <thead>
                                 <tr>
@@ -156,6 +150,7 @@ export default function IssuesTable() {
                                     <th>IssueID</th>
                                     <th>Member</th>
                                     <th>Title</th>
+                                    <th>Issue Date</th>
                                     <th>Return Date</th>
                                     <th />
                                 </tr>

@@ -21,7 +21,7 @@ export interface UserId {
     username: string;
 }
 
-export default interface IIssue {
+export interface IIssue {
     bookInfo: BookInfo;
     userId: UserId;
     _id: string;

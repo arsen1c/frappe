@@ -2,12 +2,11 @@ import { Button, Input, Modal, Text } from '@mantine/core'
 import React, { useEffect, useState } from 'react'
 import { getRequest, postRequest } from '../../../utils/AxiosInstance';
 import { IBook } from "../../../interfaces/Book.interface";
-import { IIssue } from '../../../hooks/useFetch';
+import { IIssue } from "../../../interfaces/Issue.interface"
 import { IUser } from "../../../interfaces/User.interface";
 interface PorpTypes {
     isOpened: boolean;
     setIsOpened(value: boolean): void;
-    setData(value: IIssue[]): void;
 }
 
 interface ISubmit { userId: string, bookId: string }
@@ -21,7 +20,7 @@ const handleSubmit = ({ userId, bookId }: ISubmit) => {
 
 
 
-function IssueModal({ isOpened, setIsOpened, setData }: PorpTypes) {
+function IssueModal({ isOpened, setIsOpened }: PorpTypes) {
     const [issues, setIssues] = useState([]);
     const [userValue, setUserValue] = useState<string>("");
     const [bookValue, setBookValue] = useState<string>("");
@@ -34,10 +33,9 @@ function IssueModal({ isOpened, setIsOpened, setData }: PorpTypes) {
         return postRequest("/user/issue", {
             "bookid": bookValue,
             "userid": userValue
-        }).then(({ data }: { data: IIssue[] }) => {
+        }).then(({ data }: { data: IIssue }) => {
             setIsPending(false);
             setError("");
-            setData([...data]);
             setIsOpened(false);
         }).catch(error => {
             setIsPending(false);
@@ -83,6 +81,7 @@ function IssueModal({ isOpened, setIsOpened, setData }: PorpTypes) {
             onClose={() => setIsOpened(false)}
             title="Issue a new book to user"
         >
+            {error && <Text color="red">{error}</Text>}
             <Text>Select a user</Text>
             <Input defaultValue={""} onChange={(e) => setUserValue(e.target.value)} component='select'>
                 <option key={""} value={""} defaultValue={""} disabled>{"User"}</option>
