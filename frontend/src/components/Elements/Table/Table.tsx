@@ -11,33 +11,67 @@ import {
     Center,
     Modal,
     Button,
-    Notification,
     useMantineColorScheme,
 } from '@mantine/core';
-import { IconCheck, IconPencil, IconTrash } from '@tabler/icons';
-import { useState } from 'react';
+import { IconPencil, IconTrash } from '@tabler/icons';
+import { useEffect, useState } from 'react';
 import { IIssue, useFetch } from '../../../hooks/useFetch';
-import { deleteRequest } from '../../../utils/AxiosInstance';
+import { deleteRequest, getRequest } from '../../../utils/AxiosInstance';
+import { IBook } from "../../../interfaces/Book.interface";
+import IssueModal from '../Modals/IssueModal';
+interface IssueModalProps {
+    isOpened: boolean;
+    setIsOpened(value: boolean): void;
+    userId: string;
+}
 
+interface ModalIssue {
+    value: string;
+    label: string;
+}[]
 
+function handleIssueSubmit(formData: { bookId: string, userId: string }) {
+    console.log("Data:", formData);
 
-function ModalContent({ issueId }: { issueId: string }) {
-    return (
-        <Button color={"red"} >Delete</Button>
-    )
 }
 
 export default function IssuesTable() {
+    console.log("Rendering...");
+
     const theme = useMantineTheme();
     const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
-    const { data, error, isPending } = useFetch("/issue/all");
+    // const { data, error, isPending } = useFetch("/issue/all");
+    // const {{}useIssuesContext();
+    const [data, setData] = useState<Array<IIssue>>([]);
+    const [isPending, setIsPending] = useState<boolean>(false);
+    const [error, setError] = useState<string>("");
+
     const [deleteModal, setDeleteModal] = useState({ opened: false, issueId: "" });
     const [issueIdSelected, setIssueIdSelected] = useState("");
     const [userIdSelected, setUserIdSelected] = useState("");
     const [editModalOpened, setEditModalOpened] = useState(false);
+    const [issueModalOpen, setIssueModalOpen] = useState(false);
 
     const [issues, setIssues] = useState<IIssue[]>([]);
+
+    useEffect(() => {
+        const fetchIssues = async (): Promise<void> => {
+            return getRequest("/issue/all")
+                .then(({ data }: { data: IIssue[] }) => {
+                    setIsPending(false);
+                    setError("");
+                    setData(data);
+                }).catch(error => {
+                    setIsPending(false);
+                    setError(error.message);
+                    setData([]);
+                })
+        }
+
+        fetchIssues();
+
+    }, [0, issueModalOpen]);
 
     function deleteIssue(issueId: string, userId: string) {
         deleteRequest("/user/issue", {
@@ -88,7 +122,7 @@ export default function IssuesTable() {
                     </ActionIcon>
                     <ActionIcon color="red">
                         <IconTrash onClick={() => {
-                            setDeleteModal({ opened: true, issueId: item._id })
+                            setDeleteModal({ opened: true, issueId: item._id });
                             setIssueIdSelected(item._id);
                             setUserIdSelected(item.userId.id);
                         }
@@ -100,31 +134,35 @@ export default function IssuesTable() {
     ));
 
     return (
-        <ScrollArea my={50}>
+        <div>
             <Title>Ongoing issues</Title>
-            {isPending && <Center style={{ margin: 100 }}><Loader variant='dots' size={"xl"} /></Center>}
-            {error && <Text color={"red"}>Couldn't fetch issues: {error}</Text>}
-            {(data && !isPending) &&
-                <Center style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
-                    <Modal centered opened={deleteModal.opened} withCloseButton={true} title={`Delete issue ${deleteModal.issueId}`} size="auto" onClose={() => setDeleteModal({ opened: false, issueId: "" })}>{
-                        <Button color={"red"} onClick={() => deleteIssue(issueIdSelected, userIdSelected)}>Delete</Button>
-                    }</Modal>
-                    <Button onClick={() => toggleColorScheme()}>New Issue</Button>
-                    <Table highlightOnHover sx={{ minWidth: 800, maxHeight: "1px" }} verticalSpacing="xs">
-                        <thead>
-                            <tr>
-                                <th>BookID</th>
-                                <th>IssueID</th>
-                                <th>Member</th>
-                                <th>Title</th>
-                                <th>Return Date</th>
-                                <th />
-                            </tr>
-                        </thead>
-                        <tbody>{rows}</tbody>
-                    </Table>
-                </Center>
-            }
-        </ScrollArea>
+            <Button onClick={() => setIssueModalOpen(true)}>New issue</Button>
+            <ScrollArea my={50}>
+                {isPending && <Center style={{ margin: 100 }}><Loader variant='dots' size={"xl"} /></Center>}
+                {error && <Text color={"red"}>Couldn't fetch issues: {error}</Text>}
+                {(data && !isPending) &&
+                    <Center style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
+                        <Modal centered opened={deleteModal.opened} withCloseButton={true} title={`Delete issue ${deleteModal.issueId}`} size="auto" onClose={() => setDeleteModal({ opened: false, issueId: "" })}>{
+                            <Button color={"red"} onClick={() => deleteIssue(issueIdSelected, userIdSelected)}>Delete</Button>
+                        }
+                        </Modal>
+                        <IssueModal isOpened={issueModalOpen} setIsOpened={setIssueModalOpen} setData={setData} />
+                        <Table highlightOnHover sx={{ minWidth: 800, maxHeight: "1px" }} verticalSpacing="xs">
+                            <thead>
+                                <tr>
+                                    <th>BookID</th>
+                                    <th>IssueID</th>
+                                    <th>Member</th>
+                                    <th>Title</th>
+                                    <th>Return Date</th>
+                                    <th />
+                                </tr>
+                            </thead>
+                            <tbody>{rows}</tbody>
+                        </Table>
+                    </Center>
+                }
+            </ScrollArea>
+        </div>
     );
 }
