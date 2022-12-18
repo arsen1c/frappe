@@ -2,9 +2,8 @@ import { Button, Input, Modal, Text } from '@mantine/core'
 import React, { useEffect, useState } from 'react'
 import { getRequest, postRequest } from '../../../utils/AxiosInstance';
 import { IBook } from "../../../interfaces/Book.interface";
-import { IUser } from '../../../interfaces/User.interface';
 import { IIssue } from '../../../hooks/useFetch';
-
+import { IUser } from "../../../interfaces/User.interface";
 interface PorpTypes {
     isOpened: boolean;
     setIsOpened(value: boolean): void;

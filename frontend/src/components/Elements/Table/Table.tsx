@@ -15,10 +15,11 @@ import {
 } from '@mantine/core';
 import { IconPencil, IconTrash } from '@tabler/icons';
 import { useEffect, useState } from 'react';
-import { IIssue, useFetch } from '../../../hooks/useFetch';
+import IIssue from '../../../interfaces/Issue.interface';
 import { deleteRequest, getRequest } from '../../../utils/AxiosInstance';
 import { IBook } from "../../../interfaces/Book.interface";
 import IssueModal from '../Modals/IssueModal';
+import { useIssueStore } from '../../../context/IssuesContext';
 interface IssueModalProps {
     isOpened: boolean;
     setIsOpened(value: boolean): void;
@@ -43,7 +44,8 @@ export default function IssuesTable() {
 
     // const { data, error, isPending } = useFetch("/issue/all");
     // const {{}useIssuesContext();
-    const [data, setData] = useState<Array<IIssue>>([]);
+    // const [data, setData] = useState<Array<IIssue>>([]);
+    const { issues, newIssue } = useIssueStore();
     const [isPending, setIsPending] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
 
@@ -53,7 +55,7 @@ export default function IssuesTable() {
     const [editModalOpened, setEditModalOpened] = useState(false);
     const [issueModalOpen, setIssueModalOpen] = useState(false);
 
-    const [issues, setIssues] = useState<IIssue[]>([]);
+    // const [issues, setIssues] = useState<IIssue[]>([]);
 
     useEffect(() => {
         const fetchIssues = async (): Promise<void> => {
@@ -61,17 +63,17 @@ export default function IssuesTable() {
                 .then(({ data }: { data: IIssue[] }) => {
                     setIsPending(false);
                     setError("");
-                    setData(data);
+                    newIssue(data.map(issue => issue));
                 }).catch(error => {
                     setIsPending(false);
                     setError(error.message);
-                    setData([]);
+                    newIssue([]);
                 })
         }
 
         fetchIssues();
 
-    }, [0, issueModalOpen]);
+    }, []);
 
     function deleteIssue(issueId: string, userId: string) {
         deleteRequest("/user/issue", {
@@ -80,8 +82,8 @@ export default function IssuesTable() {
                 userid: userId
             }
         }).then(res => {
-            const newIssues = issues.filter(issue => issue._id !== issueId);
-            setIssues([...newIssues]);
+            // const newIssues = issues.filter(issue => issue._id !== issueId);
+            // newIssue([...newIssues]);
         }).catch(err => {
             console.log(err);
             // error =  
@@ -89,7 +91,7 @@ export default function IssuesTable() {
         })
     }
 
-    const rows = data && data.map((item: IIssue) => (
+    const rows = issues && issues.map((item: IIssue) => (
         <tr key={item._id}>
             <td>
                 <Text size="sm" weight={500}>
@@ -140,13 +142,13 @@ export default function IssuesTable() {
             <ScrollArea my={50}>
                 {isPending && <Center style={{ margin: 100 }}><Loader variant='dots' size={"xl"} /></Center>}
                 {error && <Text color={"red"}>Couldn't fetch issues: {error}</Text>}
-                {(data && !isPending) &&
+                {(issues && !isPending) &&
                     <Center style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
                         <Modal centered opened={deleteModal.opened} withCloseButton={true} title={`Delete issue ${deleteModal.issueId}`} size="auto" onClose={() => setDeleteModal({ opened: false, issueId: "" })}>{
                             <Button color={"red"} onClick={() => deleteIssue(issueIdSelected, userIdSelected)}>Delete</Button>
                         }
                         </Modal>
-                        <IssueModal isOpened={issueModalOpen} setIsOpened={setIssueModalOpen} setData={setData} />
+                        {/* <IssueModal isOpened={issueModalOpen} setIsOpened={setIssueModalOpen} setData={newIssue} /> */}
                         <Table highlightOnHover sx={{ minWidth: 800, maxHeight: "1px" }} verticalSpacing="xs">
                             <thead>
                                 <tr>
