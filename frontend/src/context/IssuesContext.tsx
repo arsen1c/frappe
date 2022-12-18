@@ -11,8 +11,8 @@ export interface IssueState {
 
 export const useIssueStore = create<IssueState>((set) => ({
     issues: [],
-    newIssue: (newIssueData: IIssue[]) => set((state) => ({ issues: [...newIssueData, ...state.issues,] })),
-    removeIssue: (userId, issueId) => set((state) => ({ issues: state.issues.filter(issue => issue._id !== issueId) })),
+    newIssue: (newIssueData: IIssue[]) => set((state) => ({ issues: [...newIssueData, ...state.issues] })),
+    removeIssue: (userId, issueId) => set((state) => ({ issues: [...state.issues.filter(issue => issue._id != issueId)] })),
     fetchIssues: async () => {
         // const { data } = await getRequest("/issue/al");
         // if (!data) throw new Error("Couldn't fetch")

@@ -60,7 +60,7 @@ export default function IssuesTable() {
 
     useEffect(() => {
         fetchIssues();
-    }, [])
+    }, [deleteModal, issueModalOpen])
 
 
     function deleteIssue(issueId: string, userId: string) {
@@ -73,6 +73,7 @@ export default function IssuesTable() {
             // const newIssues = issues.filter(issue(issue => issue._id !== issueId)) => issue._id !== issueId);
             // newIssue([...newIssues]);
             removeIssue(issueId, userId);
+            setDeleteModal({ opened: false, issueId: "" })
         }).catch(err => {
             console.log(err);
             // error =  

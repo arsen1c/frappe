@@ -21,7 +21,6 @@ const handleSubmit = ({ userId, bookId }: ISubmit) => {
 
 
 function IssueModal({ isOpened, setIsOpened }: PorpTypes) {
-    const [issues, setIssues] = useState([]);
     const [userValue, setUserValue] = useState<string>("");
     const [bookValue, setBookValue] = useState<string>("");
     const [error, setError] = useState("");
