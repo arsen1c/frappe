@@ -20,9 +20,9 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useFetch } from '../../../hooks/useFetch';
 import { IBook } from '../../../interfaces/Book.interface';
-import { IUser } from '../../../interfaces/User.interface';
-import { infoData } from '../User/UserInfoCard';
-import { UserInfoICard } from '../User/UserInfoCard';
+import { IMember } from '../../../interfaces/Member.interface';
+import { infoData } from '../Member/MemberInfoCard';
+import { MemberInfoICard } from '../Member/MemberInfoCard';
 
 
 const NotificationComponent = () => {
@@ -39,7 +39,7 @@ function ModalContent({ issueId }: { issueId: string }) {
     )
 }
 
-export default function UsersTable() {
+export default function MembersTable() {
     const theme = useMantineTheme();
     const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
@@ -47,28 +47,27 @@ export default function UsersTable() {
     const [deleteModal, setDeleteModal] = useState({ opened: false, issueId: "" });
     const [editModalOpened, setEditModalOpened] = useState(false);
 
-    const rows = data && data.map((item: IUser) => (
-        <tr key={item._id}>
+    const rows = data && data.map((member: IMember) => (
+        <tr key={member._id}>
             <td>
-                <Link style={{ textDecoration: "none" }} to={`/user/${item.username}`}>
+                <Link style={{ textDecoration: "none" }} to={`/member/${member.username}`}>
                     <Text color={theme.black} size="sm" tt="capitalize" weight={500}>
-                        {/* {item.name} */}
-                        <UserInfoICard {...infoData({ title: item.isAdmin ? "Admin" : "Member", name: item.name })} />
+                        <MemberInfoICard {...infoData({ title: member.isAdmin ? "Admin" : "Member", name: member.name })} />
                     </Text></Link>
             </td>
             <td>
                 <Text size="sm" weight={500}>
-                    {item.booksIssued?.length || 0}
+                    {member.booksIssued?.length || 0}
                 </Text>
             </td>
             <td>
                 <Text sx={{ display: "flex", alignItems: "center" }} size="sm" weight={500}>
-                    <IconCurrencyRupee size={15} /> {item.debt}
+                    <IconCurrencyRupee size={15} /> {member.debt}
                 </Text>
             </td>
             <td>
                 <Anchor<'a'> size="sm" weight={800}>
-                    {String(new Date(item.createdAt).toDateString())}
+                    {String(new Date(member.createdAt).toDateString())}
                 </Anchor>
             </td>
             <td>
@@ -91,19 +90,19 @@ export default function UsersTable() {
 
     return (
         <div>
-            <Center><Title>Users</Title></Center>
+            <Center><Title>Members</Title></Center>
             <ScrollArea>
                 {isPending && <Center style={{ margin: 100 }}><Loader variant='dots' size={"xl"} /></Center>}
-                {error && <Text color={"red"}>Couldn't fetch users: {error}</Text>}
+                {error && <Text color={"red"}>Couldn't fetch members: {error}</Text>}
                 {(data && !isPending) &&
                     <Center style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
                         <Modal centered opened={deleteModal.opened} withCloseButton={true} title={`Delete issue ${deleteModal.issueId}`} size="auto" onClose={() => setDeleteModal({ opened: false, issueId: "" })}>{<ModalContent issueId={"LMA"} />}</Modal>
-                        <Button onClick={() => toggleColorScheme()}>New User</Button>
+                        <Button onClick={() => toggleColorScheme()}>New Member</Button>
                         <Table highlightOnHover sx={{ minWidth: 800, maxHeight: "1px" }} verticalSpacing="xs">
                             <thead>
                                 <tr>
                                     <th>Member</th>
-                                    <th>Books Issues</th>
+                                    <th>Books Issued</th>
                                     <th>Debt</th>
                                     <th>Member since</th>
                                     <th />

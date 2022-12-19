@@ -4,15 +4,15 @@ import { Group, Avatar, Text, Menu, UnstyledButton } from '@mantine/core';
 import { Link } from 'react-router-dom';
 import { ThemeToggleButton } from '../ThemeToggle/ThemeToggleButton';
 
-interface UserButtonProps extends React.ComponentPropsWithoutRef<'button'> {
+interface MemberButtonProps extends React.ComponentPropsWithoutRef<'button'> {
     image: string;
     name: string;
     username: string;
     icon?: React.ReactNode;
 }
 
-const UserButton = forwardRef<HTMLButtonElement, UserButtonProps>(
-    ({ image, name, username, icon, ...others }: UserButtonProps, ref) => (
+const UserButton = forwardRef<HTMLButtonElement, MemberButtonProps>(
+    ({ image, name, username, icon, ...others }: MemberButtonProps, ref) => (
         <UnstyledButton
             ref={ref}
             sx={(theme) => ({

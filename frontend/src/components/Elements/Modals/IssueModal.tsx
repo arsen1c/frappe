@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { getRequest, postRequest } from '../../../utils/AxiosInstance';
 import { IBook } from "../../../interfaces/Book.interface";
 import { IIssue } from "../../../interfaces/Issue.interface"
-import { IUser } from "../../../interfaces/User.interface";
+import { IUser } from "../../../interfaces/Member.interface";
 interface PorpTypes {
     isOpened: boolean;
     setIsOpened(value: boolean): void;

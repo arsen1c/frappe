@@ -95,7 +95,7 @@ export default function IssuesTable() {
             </td>
 
             <td>
-                <Anchor<'a'> size="sm" weight={800} href={`/user/${item.userId.username}`}>
+                <Anchor<'a'> size="sm" weight={800} href={`/member/${item.userId.username}`}>
                     {item.userId.username}
                 </Anchor>
             </td>

@@ -3,7 +3,7 @@ import { useLocalStorage } from "@mantine/hooks"
 import AppShell from "./components/Layout/AppShell"
 import NotFound from "./components/Elements/NotFound/NotFound"
 import { BrowserRouter as Router, Routes, Route, Link, Outlet } from "react-router-dom"
-import User from "./components/Elements/User/User"
+import Member from "./components/Elements/Member/Member"
 import Home from "./components/Home/Home"
 import { useState } from "react"
 import { useTheme } from "@emotion/react"
@@ -34,7 +34,7 @@ function App() {
             {/* Routes with AppShellExmaple layout */}
             <Route element={<AppShell ><Outlet /></AppShell>}>
               <Route path="/" element={<Home />} />
-              <Route path="/users" element={< User />} />
+              <Route path="/members" element={< Member />} />
               <Route path="/books" element={< Books />} />
               <Route />
             </Route>

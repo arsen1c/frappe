@@ -24,7 +24,7 @@ export const infoData = ({ title, name }: userInfoProps) => {
     }
 }
 
-export function UserInfoICard({ name, title }: userInfoProps) {
+export function MemberInfoICard({ name, title }: userInfoProps) {
     const { classes } = useStyles();
     return (
         <div>
