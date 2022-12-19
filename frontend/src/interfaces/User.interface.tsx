@@ -2,7 +2,7 @@ export interface IUser {
     _id: string;
     name: string;
     username: string;
-    booksIssued?: (string)[] | null;
+    booksIssued?: (number)[];
     debt: number;
     isAdmin: boolean;
     createdAt: string;

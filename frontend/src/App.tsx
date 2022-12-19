@@ -34,7 +34,7 @@ function App() {
             {/* Routes with AppShellExmaple layout */}
             <Route element={<AppShell ><Outlet /></AppShell>}>
               <Route path="/" element={<Home />} />
-              <Route path="/user" element={< User />} />
+              <Route path="/users" element={< User />} />
               <Route path="/books" element={< Books />} />
               <Route />
             </Route>
