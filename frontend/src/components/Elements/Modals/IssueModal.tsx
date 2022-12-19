@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { getRequest, postRequest } from '../../../utils/AxiosInstance';
 import { IBook } from "../../../interfaces/Book.interface";
 import { IIssue } from "../../../interfaces/Issue.interface"
-import { IUser } from "../../../interfaces/Member.interface";
+import { IMember } from "../../../interfaces/Member.interface";
 interface PorpTypes {
     isOpened: boolean;
     setIsOpened(value: boolean): void;
@@ -25,7 +25,7 @@ function IssueModal({ isOpened, setIsOpened }: PorpTypes) {
     const [bookValue, setBookValue] = useState<string>("");
     const [error, setError] = useState("");
     const [isPending, setIsPending] = useState(true);
-    const [users, setUsers] = useState<Array<IUser> | []>([]);
+    const [users, setUsers] = useState<Array<IMember> | []>([]);
     const [books, setBooks] = useState<Array<IBook> | []>([]);
 
     const postIssueData = async (): Promise<void> => {
@@ -38,7 +38,7 @@ function IssueModal({ isOpened, setIsOpened }: PorpTypes) {
             setIsOpened(false);
         }).catch(error => {
             setIsPending(false);
-            setError(error.message);
+            setError(error.response.data.message);
         })
     }
 
@@ -61,7 +61,7 @@ function IssueModal({ isOpened, setIsOpened }: PorpTypes) {
         const fetchUsers = async (): Promise<void> => {
             // Fetch book
             return getRequest("/user/all")
-                .then(({ data }: { data: IUser[] }) => {
+                .then(({ data }: { data: IMember[] }) => {
                     setIsPending(false);
                     setError("");
                     setUsers(data);

@@ -113,10 +113,7 @@ export default function IssuesTable() {
                 </Text>
             </td>
             <td>
-                <Group spacing={0} position="right">
-                    <ActionIcon>
-                        <IconPencil size={16} stroke={1.5} />
-                    </ActionIcon>
+                <Group spacing={0} position="left">
                     <ActionIcon color="red">
                         <IconTrash onClick={() => {
                             setDeleteModal({ opened: true, issueId: item._id });
