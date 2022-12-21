@@ -29,6 +29,7 @@ function App() {
           colorScheme,
         }}
       >
+
         <Router>
           <Routes>
             {/* Routes with AppShellExmaple layout */}

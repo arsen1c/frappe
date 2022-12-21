@@ -1,11 +1,11 @@
 import axios from "axios";
 
-const AxiosInstance = axios.create();
+export const AxiosInstance = axios.create();
 AxiosInstance.defaults.baseURL = "http://localhost:5000"
 
 // GET Request
-export function getRequest(endpoint: string) {
-    return AxiosInstance.get(endpoint);
+export function getRequest<T>(endpoint: string) {
+    return AxiosInstance.get<T>(endpoint);
 }
 
 // POST Requst
@@ -22,3 +22,4 @@ export function deleteRequest(endpoint: string, payload: Object) {
 export function putRequest(endpoint: string, payload: Object) {
     return AxiosInstance.put(endpoint, payload);
 }
+

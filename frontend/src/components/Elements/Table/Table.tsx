@@ -20,6 +20,7 @@ import { deleteRequest, getRequest } from '../../../utils/AxiosInstance';
 import { IBook } from "../../../interfaces/Book.interface";
 import IssueModal from '../Modals/IssueModal';
 import { useIssueStore } from '../../../context/IssuesContext';
+import { successToast } from '../../../utils/ToastNotifications';
 interface IssueModalProps {
     isOpened: boolean;
     setIsOpened(value: boolean): void;
@@ -73,7 +74,8 @@ export default function IssuesTable() {
             // const newIssues = issues.filter(issue(issue => issue._id !== issueId)) => issue._id !== issueId);
             // newIssue([...newIssues]);
             removeIssue(issueId, userId);
-            setDeleteModal({ opened: false, issueId: "" })
+            setDeleteModal({ opened: false, issueId: "" });
+            successToast("Issue deleted");
         }).catch(err => {
             console.log(err);
             // error =  

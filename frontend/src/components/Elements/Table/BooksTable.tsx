@@ -15,33 +15,54 @@ import {
     useMantineColorScheme,
     Menu,
 } from '@mantine/core';
-import { IconCheck, IconDots, IconPencil, IconTrash } from '@tabler/icons';
-import { useState } from 'react';
-import { IIssue, useFetch } from '../../../hooks/useFetch';
+import { IconCheck, IconDots, IconPencil, IconTrash, IconX } from '@tabler/icons';
+import { useEffect, useState } from 'react';
+import { useFetch } from '../../../hooks/useFetch';
 import { IBook } from '../../../interfaces/Book.interface';
-
-
-const NotificationComponent = () => {
-    return (
-        <Notification icon={<IconCheck size={20} />} title="We notify you that">
-            You are now obligated to give a star to Mantine project on GitHub
-        </Notification>
-    )
-}
+import { AxiosInstance, getRequest } from '../../../utils/AxiosInstance';
+import useSwr from "swr";
+import useSWRMutation from "swr/mutation";
+import { toast, ToastContainer } from 'react-toastify';
+import { showNotification } from '@mantine/notifications';
+import { errorToast } from '../../../utils/ToastNotifications';
 
 function ModalContent({ issueId }: { issueId: string }) {
     return (
-        <Button color={"red"} onClick={NotificationComponent}>Delete</Button>
+        <Button color={"red"}>Delete</Button>
     )
 }
+
+const fetcher = (url: string) => getRequest<IBook[]>(url).then(res => res.data);
+const importFetcher = (url: string) => getRequest<IBook[]>(url).then(res => res.data);
 
 export default function BooksTable() {
     const theme = useMantineTheme();
     const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+    // const {importError, setImportError} = useState("");
 
-    const { data, error, isPending } = useFetch("/book/all");
+    const { data, error, isLoading } = useSwr("/book/all", fetcher);
+    const { trigger, error: importError } = useSWRMutation("/book/import", importFetcher);
+
+    // const [books, setBooks] = useState<IBook[]>([]);
+    // const [error, setError] = useState<string>("");
+    // const [isPending, setIsPending] = useState<boolean>(true);
+
     const [deleteModal, setDeleteModal] = useState({ opened: false, issueId: "" });
     const [editModalOpened, setEditModalOpened] = useState(false);
+    const notify = (message: string) => toast(message)
+    // useEffect(() => {
+    //     const fetchBooks = async () => {
+    //         setIsPending(true)
+    //         getRequest("/book/all")
+    //             .then((res) =1
+    //                 setBooks(res.data);
+    //                 setError("");
+    //                 setIsPending(false);
+    //             }).catch(error => {
+    //                 setIsPending(false);
+    //                 setError(error.message)
+    //             })
+    //     }
 
     const rows = data && data.map((item: IBook) => (
         <tr key={item._id}>
@@ -90,12 +111,21 @@ export default function BooksTable() {
         <div>
             <Center><Title>Books List</Title></Center>
             <ScrollArea>
-                {isPending && <Center style={{ margin: 100 }}><Loader variant='dots' size={"xl"} /></Center>}
+                {isLoading && <Center style={{ margin: 100 }}><Loader variant='dots' size={"xl"} /></Center>}
                 {error && <Text color={"red"}>Couldn't fetch books: {error}</Text>}
-                {(data && !isPending) &&
+                {/* {importError && <Text color={"red"}>Couldn't fetch books: {importError.response.data.message}</Text>} */}
+                {/* {importError && showNotification({
+                    // title: 'Default notification',
+                    message: importError.response.data.message,
+                    icon: <IconX />,
+                    color: "red",
+                })} */}
+                {importError && errorToast(importError.response.data.message)}
+
+                {(data && !isLoading) &&
                     <Center style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
                         <Modal centered opened={deleteModal.opened} withCloseButton={true} title={`Delete issue ${deleteModal.issueId}`} size="auto" onClose={() => setDeleteModal({ opened: false, issueId: "" })}>{<ModalContent issueId={"LMA"} />}</Modal>
-                        <Button onClick={() => toggleColorScheme()}>Import books</Button>
+                        <Button onClick={trigger}>Import books</Button>
                         <Table highlightOnHover sx={{ minWidth: 800, maxHeight: "1px" }} verticalSpacing="xs">
                             <thead>
                                 <tr>
@@ -112,6 +142,6 @@ export default function BooksTable() {
                     </Center>
                 }
             </ScrollArea>
-        </div>
+        </div >
     );
 }

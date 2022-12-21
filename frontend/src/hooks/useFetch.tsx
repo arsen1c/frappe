@@ -33,29 +33,35 @@ export const useFetch = (endpoint: string) => {
     const [data, setData] = useState([]);
     const [isPending, setIsPending] = useState(true);
     const [error, setError] = useState("");
+    let refetch;
 
     useEffect(() => {
-        const abortControl = new AbortController();
+        const fetchData = async () => {
+            const abortControl = new AbortController();
 
-        getRequest(endpoint)
-            .then(res => {
-                console.log(res.data);
+            getRequest(endpoint)
+                .then(res => {
+                    console.log("Books", res.data);
 
-                setData(res.data);
-                setIsPending(false);
-                setError("");
-            })
-            .catch(error => {
-                if (error.name === 'AbortError') {
-                    setError("Fetch aborted");
+                    setData(res.data);
                     setIsPending(false);
-                } else {
-                    setError(error.message);
-                    setIsPending(false);
-                }
-            })
-        return () => abortControl.abort();
-    }, [endpoint]);
+                    setError("");
+                })
+                .catch(error => {
+                    if (error.name === 'AbortError') {
+                        setError("Fetch aborted");
+                        setIsPending(false);
+                    } else {
+                        setError(error.message);
+                        setIsPending(false);
+                    }
+                })
+            return () => abortControl.abort();
+        }
 
-    return { data, isPending, error };
+        fetchData();
+        refetch = fetchData();
+    }, [endpoint, refetch]);
+
+    return { data, isPending, error, refetch };
 }

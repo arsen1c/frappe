@@ -13,12 +13,14 @@
     "@mantine/core": "^5.8.4",
     "@mantine/ds": "^5.9.2",
     "@mantine/hooks": "^5.8.4",
+    "@mantine/notifications": "^5.9.5",
     "@mantine/prism": "^5.9.2",
     "@tabler/icons": "^1.116.1",
     "axios": "^1.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.4.5",
+    "swr": "^2.0.0",
     "zustand": "^4.1.5"
   },
   "devDependencies": {

@@ -4,6 +4,7 @@ import { getRequest, postRequest } from '../../../utils/AxiosInstance';
 import { IBook } from "../../../interfaces/Book.interface";
 import { IIssue } from "../../../interfaces/Issue.interface"
 import { IMember } from "../../../interfaces/Member.interface";
+import { successToast } from '../../../utils/ToastNotifications';
 interface PorpTypes {
     isOpened: boolean;
     setIsOpened(value: boolean): void;
@@ -36,6 +37,7 @@ function IssueModal({ isOpened, setIsOpened }: PorpTypes) {
             setIsPending(false);
             setError("");
             setIsOpened(false);
+            successToast("New book issued!")
         }).catch(error => {
             setIsPending(false);
             setError(error.response.data.message);
