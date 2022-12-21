@@ -22,9 +22,8 @@ import { IBook } from '../../../interfaces/Book.interface';
 import { AxiosInstance, getRequest } from '../../../utils/AxiosInstance';
 import useSwr from "swr";
 import useSWRMutation from "swr/mutation";
-import { toast, ToastContainer } from 'react-toastify';
 import { showNotification } from '@mantine/notifications';
-import { errorToast } from '../../../utils/ToastNotifications';
+import { errorToast, successToast } from '../../../utils/ToastNotifications';
 
 function ModalContent({ issueId }: { issueId: string }) {
     return (
@@ -41,15 +40,18 @@ export default function BooksTable() {
     // const {importError, setImportError} = useState("");
 
     const { data, error, isLoading } = useSwr("/book/all", fetcher);
-    const { trigger, error: importError } = useSWRMutation("/book/import", importFetcher);
+    const { trigger, error: importError, data: importBooksData } = useSWRMutation("/book/import", importFetcher);
 
     // const [books, setBooks] = useState<IBook[]>([]);
     // const [error, setError] = useState<string>("");
     // const [isPending, setIsPending] = useState<boolean>(true);
 
+    if (importBooksData) {
+        successToast("Books imported succesfully!");
+    }
+
     const [deleteModal, setDeleteModal] = useState({ opened: false, issueId: "" });
     const [editModalOpened, setEditModalOpened] = useState(false);
-    const notify = (message: string) => toast(message)
     // useEffect(() => {
     //     const fetchBooks = async () => {
     //         setIsPending(true)
@@ -109,23 +111,24 @@ export default function BooksTable() {
 
     return (
         <div>
-            <Center><Title>Books List</Title></Center>
+            <Group
+                sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    marginBottom: 20
+                }}
+            >
+                <Title>Books List</Title>
+                <Button sx={{ alignSelf: "end" }} onClick={trigger}>Import books</Button>
+            </Group>
+            <Modal centered opened={deleteModal.opened} withCloseButton={true} title={`Delete issue ${deleteModal.issueId}`} size="auto" onClose={() => setDeleteModal({ opened: false, issueId: "" })}>{<ModalContent issueId={"LMA"} />}</Modal>
             <ScrollArea>
                 {isLoading && <Center style={{ margin: 100 }}><Loader variant='dots' size={"xl"} /></Center>}
                 {error && <Text color={"red"}>Couldn't fetch books: {error}</Text>}
-                {/* {importError && <Text color={"red"}>Couldn't fetch books: {importError.response.data.message}</Text>} */}
-                {/* {importError && showNotification({
-                    // title: 'Default notification',
-                    message: importError.response.data.message,
-                    icon: <IconX />,
-                    color: "red",
-                })} */}
                 {importError && errorToast(importError.response.data.message)}
 
                 {(data && !isLoading) &&
                     <Center style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
-                        <Modal centered opened={deleteModal.opened} withCloseButton={true} title={`Delete issue ${deleteModal.issueId}`} size="auto" onClose={() => setDeleteModal({ opened: false, issueId: "" })}>{<ModalContent issueId={"LMA"} />}</Modal>
-                        <Button onClick={trigger}>Import books</Button>
                         <Table highlightOnHover sx={{ minWidth: 800, maxHeight: "1px" }} verticalSpacing="xs">
                             <thead>
                                 <tr>

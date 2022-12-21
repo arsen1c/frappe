@@ -15,7 +15,7 @@ import { ThemeToggleButton } from '../Elements/ThemeToggle/ThemeToggleButton';
 
 const data = [
     { link: '/', label: 'Home', icon: IconHome },
-    { link: '/members', label: 'Member', icon: IconUser },
+    { link: '/members', label: 'Members', icon: IconUser },
     { link: '/books', label: 'Books', icon: IconBook2 }
 ];
 

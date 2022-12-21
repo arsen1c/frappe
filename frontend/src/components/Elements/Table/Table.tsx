@@ -131,8 +131,16 @@ export default function IssuesTable() {
 
     return (
         <div>
-            <Title>Ongoing issues</Title>
-            <Button onClick={() => setIssueModalOpen(true)}>New issue</Button>
+            <Group
+                sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    marginBottom: 20
+                }}
+            >
+                <Title>Ongoing issues</Title>
+                <Button sx={{ alignSelf: "end" }} onClick={() => setIssueModalOpen(true)}>New issue</Button>
+            </Group>
             <ScrollArea my={50}>
                 {/* {isPending && <Center style={{ margin: 100 }}><Loader variant='dots' size={"xl"} /></Center>} */}
                 {error && <Text color={"red"}>Couldn't fetch issues: {error}</Text>}

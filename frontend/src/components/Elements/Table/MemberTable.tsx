@@ -90,14 +90,22 @@ export default function MembersTable() {
 
     return (
         <div>
-            <Center><Title>Members</Title></Center>
+            <Group
+                sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    marginBottom: 20
+                }}
+            >
+                <Title>Members</Title>
+                <Button sx={{ alignSelf: "end" }} onClick={() => toggleColorScheme()}>New Member</Button>
+            </Group>
+            <Modal centered opened={deleteModal.opened} withCloseButton={true} title={`Delete issue ${deleteModal.issueId}`} size="auto" onClose={() => setDeleteModal({ opened: false, issueId: "" })}>{<ModalContent issueId={"LMA"} />}</Modal>
             <ScrollArea>
                 {isPending && <Center style={{ margin: 100 }}><Loader variant='dots' size={"xl"} /></Center>}
                 {error && <Text color={"red"}>Couldn't fetch members: {error}</Text>}
                 {(data && !isPending) &&
                     <Center style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
-                        <Modal centered opened={deleteModal.opened} withCloseButton={true} title={`Delete issue ${deleteModal.issueId}`} size="auto" onClose={() => setDeleteModal({ opened: false, issueId: "" })}>{<ModalContent issueId={"LMA"} />}</Modal>
-                        <Button onClick={() => toggleColorScheme()}>New Member</Button>
                         <Table highlightOnHover sx={{ minWidth: 800, maxHeight: "1px" }} verticalSpacing="xs">
                             <thead>
                                 <tr>
