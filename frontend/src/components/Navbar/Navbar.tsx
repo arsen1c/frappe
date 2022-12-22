@@ -47,10 +47,10 @@ export default function NavbrarExample() {
             <Navbar.Section className={classes.footer}>
                 <AccountMenu />
                 <Group>
-                    <ActionIcon size="lg">
-                        <IconBrandGithub href='www.youtube.com' size={40} stroke={1.5} />
+                    <ActionIcon size="lg" component='a' href='http://www.github.com/arsen1c'>
+                        <IconBrandGithub size={40} stroke={1.5} />
                     </ActionIcon>
-                    <ActionIcon size="lg">
+                    <ActionIcon size="lg" component='a' href='http://www.linkedin.com/in/aashish-gajadhane'>
                         <IconBrandLinkedin href='www.youtube.com' size={40} stroke={1.5} />
                     </ActionIcon>
                 </Group>

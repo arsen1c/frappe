@@ -15,7 +15,7 @@ import {
     useMantineColorScheme,
     Menu,
 } from '@mantine/core';
-import { IconCheck, IconDots, IconPencil, IconTrash, IconX } from '@tabler/icons';
+import { IconCheck, IconDots, IconPencil, IconSearch, IconTrash, IconX } from '@tabler/icons';
 import { useEffect, useState } from 'react';
 import { useFetch } from '../../../hooks/useFetch';
 import { IBook } from '../../../interfaces/Book.interface';
@@ -119,7 +119,12 @@ export default function BooksTable() {
                 }}
             >
                 <Title>Books List</Title>
-                <Button sx={{ alignSelf: "end" }} onClick={trigger}>Import books</Button>
+                <Group sx={{ alignSelf: "end" }}>
+                    <ActionIcon sx={{ padding: "10" }} variant='filled' color={"blue"} component='button'>
+                        <IconSearch size={30} stroke={1.5} />
+                    </ActionIcon>
+                    <Button onClick={trigger}>Import books</Button>
+                </Group>
             </Group>
             <Modal centered opened={deleteModal.opened} withCloseButton={true} title={`Delete issue ${deleteModal.issueId}`} size="auto" onClose={() => setDeleteModal({ opened: false, issueId: "" })}>{<ModalContent issueId={"LMA"} />}</Modal>
             <ScrollArea>
