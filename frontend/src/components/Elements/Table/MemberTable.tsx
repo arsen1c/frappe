@@ -14,15 +14,18 @@ import {
     useMantineColorScheme,
     Menu,
     Modal,
+    Tooltip,
 } from '@mantine/core';
-import { IconCurrencyRupee, IconDots, IconPencil, IconTrash } from '@tabler/icons';
+import { IconCurrencyRupee, IconDots, IconEdit, IconPencil, IconTrash } from '@tabler/icons';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useFetch } from '../../../hooks/useFetch';
 import { IMember } from '../../../interfaces/Member.interface';
 import { infoData } from '../Member/MemberInfoCard';
 import { MemberInfoICard } from '../Member/MemberInfoCard';
 import MemberModal from '../Modals/MemberModal';
+import useSWRMutation from "swr/mutation";
+import userSWR from "swr";
+import { getRequest } from '../../../utils/AxiosInstance';
 
 interface IMemberModal {
     open: boolean;
@@ -41,16 +44,19 @@ export const memberFormInitialValues: IMember = {
     booksIssued: [0]
 }
 
+
+const fetcher = (endpoint: string): Promise<IMember[]> => getRequest<IMember[]>(endpoint).then(({ data }: { data: IMember[] }) => data);
+
 export default function MembersTable() {
     const theme = useMantineTheme();
     const [memberModalOpen, setMemberModalOpen] = useState<IMemberModal>({ open: false, member: memberFormInitialValues });
 
-    const { data, error, isPending } = useFetch("/user/all");
+    const { data, error, isLoading, mutate } = userSWR<IMember[]>("/user/all", fetcher);
 
     const rows = data && data.map((member: IMember) => (
         <tr key={member._id}>
             <td>
-                <Text variant='link' color={theme.black} size="sm" tt="capitalize" weight={500}>
+                <Text color={theme.black} size="sm" tt="capitalize" weight={500}>
                     <MemberInfoICard {...infoData({ title: member.isAdmin ? "Admin" : "Member", name: member.name })} />
                 </Text>
             </td>
@@ -70,19 +76,23 @@ export default function MembersTable() {
                 </Anchor>
             </td>
             <td>
-                <Menu transition="pop" withArrow position="bottom">
-                    <Menu.Target>
-                        <ActionIcon>
-                            <IconDots size={16} stroke={1.5} />
+                <Group spacing={0} color="blue" position="left">
+                    <Tooltip label="Edit" withArrow color={theme.colors.blue[4]}>
+                        <ActionIcon onClick={() => setMemberModalOpen({ open: true, member })}>
+                            <IconEdit size={16} stroke={1.5} />
                         </ActionIcon>
-                    </Menu.Target>
-                    <Menu.Dropdown>
-                        <Menu.Item onClick={() => setMemberModalOpen({ open: true, member })} icon={<IconPencil size={16} stroke={1.5} />}>Edit</Menu.Item>
-                        <Menu.Item icon={<IconTrash size={16} stroke={1.5} />} color="red">
-                            Delete
-                        </Menu.Item>
-                    </Menu.Dropdown>
-                </Menu>
+                    </Tooltip>
+                    <Tooltip label="Delete" withArrow color={theme.colors.blue[4]}>
+                        <ActionIcon color="red">
+                            <IconTrash onClick={() => {
+                                // setDeleteModal({ opened: true, issueId: item._id });
+                                // setIssueIdSelected(item._id);
+                                // setUserIdSelected(item.userId.id);
+                            }
+                            } size={16} stroke={1.5} />
+                        </ActionIcon>
+                    </Tooltip>
+                </Group>
             </td>
         </tr>
     ));
@@ -101,9 +111,9 @@ export default function MembersTable() {
             </Group>
             <Modal title="Edit member" opened={memberModalOpen.open} onClose={() => setMemberModalOpen({ open: false, member: memberFormInitialValues })}><MemberModal member={memberModalOpen.member} /></Modal>
             <ScrollArea>
-                {isPending && <Center style={{ margin: 100 }}><Loader variant='dots' size={"xl"} /></Center>}
-                {error && <Text color={"red"}>Couldn't fetch members: {error}</Text>}
-                {(data && !isPending) &&
+                {isLoading && <Center style={{ margin: 100 }}><Loader variant='dots' size={"xl"} /></Center>}
+                {error && <Center my={20}><Text color={"red"}>Couldn't fetch members: {error.message}</Text></Center>}
+                {(data && !isLoading) &&
                     <Center style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
                         <Table highlightOnHover sx={{ minWidth: 800, maxHeight: "1px" }} verticalSpacing="xs">
                             <thead>
