@@ -14,8 +14,9 @@ import {
     Notification,
     useMantineColorScheme,
     Menu,
+    Tooltip,
 } from '@mantine/core';
-import { IconCheck, IconDots, IconPencil, IconSearch, IconTrash, IconX } from '@tabler/icons';
+import { IconBookDownload, IconCheck, IconChevronsDownLeft, IconDots, IconPencil, IconSearch, IconTrash, IconX } from '@tabler/icons';
 import { useEffect, useState } from 'react';
 import { useFetch } from '../../../hooks/useFetch';
 import { IBook } from '../../../interfaces/Book.interface';
@@ -40,7 +41,7 @@ export default function BooksTable() {
     // const {importError, setImportError} = useState("");
 
     const { data, error, isLoading } = useSwr("/book/all", fetcher);
-    const { trigger, error: importError, data: importBooksData } = useSWRMutation("/book/import", importFetcher);
+    const { trigger, error: importError, data: importBooksData, isMutating } = useSWRMutation("/book/import", importFetcher);
 
     // const [books, setBooks] = useState<IBook[]>([]);
     // const [error, setError] = useState<string>("");
@@ -120,10 +121,19 @@ export default function BooksTable() {
             >
                 <Title>Books List</Title>
                 <Group sx={{ alignSelf: "end" }}>
-                    <ActionIcon sx={{ padding: "10" }} variant='filled' color={"blue"} component='button'>
-                        <IconSearch size={30} stroke={1.5} />
-                    </ActionIcon>
-                    <Button onClick={trigger}>Import books</Button>
+                    <Tooltip label="Search" withArrow color={theme.colors.blue[4]}>
+                        <ActionIcon color="blue">
+                            <IconSearch />
+                        </ActionIcon>
+                    </Tooltip>
+                    <Tooltip label="Import Books" withArrow color={theme.colors.blue[4]}>
+                        <ActionIcon color="blue" loading={isMutating} onClick={trigger}>
+                            <IconBookDownload />
+                        </ActionIcon>
+                    </Tooltip>
+                    {/* <Button variant='subtle' rightIcon={<IconBookDownload />} loading={isMutating} onClick={trigger}>
+                        Import
+                    </Button> */}
                 </Group>
             </Group>
             <Modal centered opened={deleteModal.opened} withCloseButton={true} title={`Delete issue ${deleteModal.issueId}`} size="auto" onClose={() => setDeleteModal({ opened: false, issueId: "" })}>{<ModalContent issueId={"LMA"} />}</Modal>
