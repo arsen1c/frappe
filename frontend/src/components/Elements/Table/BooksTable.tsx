@@ -22,43 +22,10 @@ import useSwr from "swr";
 import useSWRMutation from "swr/mutation";
 import { errorToast, successToast } from '../../../utils/ToastNotifications';
 import { useDebouncedValue } from '@mantine/hooks';
+import { BookSearchModal } from '../Modals/BookSearchModal';
 
 const fetcher = (url: string) => getRequest<IBook[]>(url).then(res => res.data);
 const importFetcher = (url: string) => getRequest<IBook[]>(url).then(res => res.data);
-const booksFetcher = (title: string) => getRequest(`https://frappe.io/api/method/frappe-library?title=${title}`).then(res => res.data);
-
-function IssueModalContent() {
-    const [title, setTitle] = useState("");
-    const [debounced] = useDebouncedValue(title, 200);
-
-    const { data, error, trigger, isMutating } = useSWRMutation(title, booksFetcher);
-
-    return (
-        <div>
-            <Title>Search</Title>
-            <TextInput
-                icon={<IconSearch size={18} stroke={1.5} />}
-                radius="xl"
-                size="md"
-                rightSection={
-                    <ActionIcon color={"blue"} size={32} radius="xl" variant="filled">
-                        <IconArrowRight size={18} stroke={1.5} />
-                    </ActionIcon>
-                }
-                placeholder="Search for books"
-                rightSectionWidth={42}
-                value={title}
-                onChange={(e) => {
-                    setTitle(e.currentTarget.value);
-                    trigger(debounced);
-                }}
-            />
-            <Center my={20}>
-                {data ? <Table></Table> : <div>No Data</div>}
-            </Center>
-        </div>
-    )
-}
 
 export default function BooksTable() {
     const theme = useMantineTheme();
@@ -138,7 +105,7 @@ export default function BooksTable() {
                     </Tooltip>
                 </Group>
             </Group>
-            <Modal opened={searchModalOpen} onClose={() => setSearchModalOpen(false)} size={"lg"}><IssueModalContent /></Modal>
+            <Modal opened={searchModalOpen} onClose={() => setSearchModalOpen(false)} size={"lg"}><BookSearchModal /></Modal>
             <ScrollArea>
                 {isLoading && <Center style={{ margin: 100 }}><Loader variant='dots' size={"xl"} /></Center>}
                 {error && <Text color={"red"}>Couldn't fetch books: {error}</Text>}
