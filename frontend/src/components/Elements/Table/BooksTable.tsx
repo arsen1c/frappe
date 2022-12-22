@@ -10,62 +10,67 @@ import {
     Loader,
     Center,
     Modal,
-    Button,
-    Notification,
-    useMantineColorScheme,
     Menu,
     Tooltip,
+    TextInput,
 } from '@mantine/core';
-import { IconBookDownload, IconCheck, IconChevronsDownLeft, IconDots, IconPencil, IconSearch, IconTrash, IconX } from '@tabler/icons';
-import { useEffect, useState } from 'react';
-import { useFetch } from '../../../hooks/useFetch';
+import { IconArrowRight, IconBookDownload, IconDots, IconPencil, IconSearch, IconTrash, IconX } from '@tabler/icons';
+import { useState } from 'react';
 import { IBook } from '../../../interfaces/Book.interface';
-import { AxiosInstance, getRequest } from '../../../utils/AxiosInstance';
+import { getRequest } from '../../../utils/AxiosInstance';
 import useSwr from "swr";
 import useSWRMutation from "swr/mutation";
-import { showNotification } from '@mantine/notifications';
 import { errorToast, successToast } from '../../../utils/ToastNotifications';
-
-function ModalContent({ issueId }: { issueId: string }) {
-    return (
-        <Button color={"red"}>Delete</Button>
-    )
-}
+import { useDebouncedValue } from '@mantine/hooks';
 
 const fetcher = (url: string) => getRequest<IBook[]>(url).then(res => res.data);
 const importFetcher = (url: string) => getRequest<IBook[]>(url).then(res => res.data);
+const booksFetcher = (title: string) => getRequest(`https://frappe.io/api/method/frappe-library?title=${title}`).then(res => res.data);
+
+function IssueModalContent() {
+    const [title, setTitle] = useState("");
+    const [debounced] = useDebouncedValue(title, 200);
+
+    const { data, error, trigger, isMutating } = useSWRMutation(title, booksFetcher);
+
+    return (
+        <div>
+            <Title>Search</Title>
+            <TextInput
+                icon={<IconSearch size={18} stroke={1.5} />}
+                radius="xl"
+                size="md"
+                rightSection={
+                    <ActionIcon color={"blue"} size={32} radius="xl" variant="filled">
+                        <IconArrowRight size={18} stroke={1.5} />
+                    </ActionIcon>
+                }
+                placeholder="Search for books"
+                rightSectionWidth={42}
+                value={title}
+                onChange={(e) => {
+                    setTitle(e.currentTarget.value);
+                    trigger(debounced);
+                }}
+            />
+            <Center my={20}>
+                {data ? <Table></Table> : <div>No Data</div>}
+            </Center>
+        </div>
+    )
+}
 
 export default function BooksTable() {
     const theme = useMantineTheme();
-    const { colorScheme, toggleColorScheme } = useMantineColorScheme();
-    // const {importError, setImportError} = useState("");
-
     const { data, error, isLoading } = useSwr("/book/all", fetcher);
     const { trigger, error: importError, data: importBooksData, isMutating } = useSWRMutation("/book/import", importFetcher);
 
-    // const [books, setBooks] = useState<IBook[]>([]);
-    // const [error, setError] = useState<string>("");
-    // const [isPending, setIsPending] = useState<boolean>(true);
+    const [searchModalOpen, setSearchModalOpen] = useState(false);
 
     if (importBooksData) {
         successToast("Books imported succesfully!");
     }
 
-    const [deleteModal, setDeleteModal] = useState({ opened: false, issueId: "" });
-    const [editModalOpened, setEditModalOpened] = useState(false);
-    // useEffect(() => {
-    //     const fetchBooks = async () => {
-    //         setIsPending(true)
-    //         getRequest("/book/all")
-    //             .then((res) =1
-    //                 setBooks(res.data);
-    //                 setError("");
-    //                 setIsPending(false);
-    //             }).catch(error => {
-    //                 setIsPending(false);
-    //                 setError(error.message)
-    //             })
-    //     }
 
     const rows = data && data.map((item: IBook) => (
         <tr key={item._id}>
@@ -122,7 +127,7 @@ export default function BooksTable() {
                 <Title>Books List</Title>
                 <Group sx={{ alignSelf: "end" }}>
                     <Tooltip label="Search" withArrow color={theme.colors.blue[4]}>
-                        <ActionIcon color="blue">
+                        <ActionIcon component='button' onClick={() => setSearchModalOpen(true)} color="blue">
                             <IconSearch />
                         </ActionIcon>
                     </Tooltip>
@@ -131,12 +136,9 @@ export default function BooksTable() {
                             <IconBookDownload />
                         </ActionIcon>
                     </Tooltip>
-                    {/* <Button variant='subtle' rightIcon={<IconBookDownload />} loading={isMutating} onClick={trigger}>
-                        Import
-                    </Button> */}
                 </Group>
             </Group>
-            <Modal centered opened={deleteModal.opened} withCloseButton={true} title={`Delete issue ${deleteModal.issueId}`} size="auto" onClose={() => setDeleteModal({ opened: false, issueId: "" })}>{<ModalContent issueId={"LMA"} />}</Modal>
+            <Modal opened={searchModalOpen} onClose={() => setSearchModalOpen(false)} size={"lg"}><IssueModalContent /></Modal>
             <ScrollArea>
                 {isLoading && <Center style={{ margin: 100 }}><Loader variant='dots' size={"xl"} /></Center>}
                 {error && <Text color={"red"}>Couldn't fetch books: {error}</Text>}
