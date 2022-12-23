@@ -106,6 +106,9 @@ export const issueBook = async (bookID: number, userId: mongoose.Types.ObjectId)
 /* Update user details */
 export const updateUser = async (userData: IUserUpdate): Promise<UserDocument> => {
     const userRecord = await UserModel.findOneAndUpdate({ _id: userData._id }, userData, { new: true }).select("-password");
+
+    if (!userRecord) throw HttpErrorException.resourceNotFound("User not found!");
+
     userRecord.save();
 
     return userRecord;
