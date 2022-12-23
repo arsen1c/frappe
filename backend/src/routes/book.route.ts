@@ -6,5 +6,6 @@ Router.get("/", (_req: Request, res: Response) => { res.status(200).send("ok") }
 Router.get("/import", bookController.getBooks);
 Router.get("/all", bookController.getAllBooks);
 Router.get("/search/:bookname", bookController.getBook);
+Router.get("/query", bookController.searchBooks);
 
 export default Router;

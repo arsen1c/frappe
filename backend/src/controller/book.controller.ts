@@ -39,5 +39,23 @@ export const bookController = {
         } catch (error: any) {
             next(error);
         }
+    },
+
+    // Search book from frappe api
+    async searchBooks(req: Request, res: Response, next: NextFunction) {
+        const { title, authors } = req.query;
+        const query = `${title && `title=${title}&`}${authors && `&authors=${authors}`}`;
+
+        return axios.get(`https://frappe.io/api/method/frappe-library?${query}`, {
+            headers: {
+                'Accept-Encoding': 'application/json',
+            }
+        })
+            .then(response => res.status(200).json(response.data))
+            .catch(error => {
+                next(error);
+            })
     }
+
+    // Import specific book from frappe api
 }
