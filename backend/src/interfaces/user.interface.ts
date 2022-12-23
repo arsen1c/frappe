@@ -4,3 +4,10 @@ export interface IUserInput {
     username: string;
     password: string;
 }
+export interface IUserUpdate {
+    _id: string;
+    name: string;
+    username: string;
+    isAdmin: boolean;
+    debt: number;
+}

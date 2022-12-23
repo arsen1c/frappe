@@ -1,7 +1,7 @@
 import { HttpErrorException } from "exceptions/HttpErrorException";
 import { IBook } from "interfaces/book.interface";
 import { IIssue } from "interfaces/issue.interface";
-import { IUserInput } from "interfaces/user.interface";
+import { IUserInput, IUserUpdate } from "interfaces/user.interface";
 import BookModel from "models/Book.model";
 import Issue from "models/Issue.model";
 import UserModel, { UserDocument } from "models/User.model";
@@ -101,6 +101,14 @@ export const issueBook = async (bookID: number, userId: mongoose.Types.ObjectId)
     logger.info("Book issued succesfully");
 
     return book;
+}
+
+/* Update user details */
+export const updateUser = async (userData: IUserUpdate): Promise<UserDocument> => {
+    const userRecord = await UserModel.findOneAndUpdate({ _id: userData._id }, userData, { new: true }).select("-password");
+    userRecord.save();
+
+    return userRecord;
 }
 
 /* Delete issue */

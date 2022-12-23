@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import IssueModel from "models/Issue.model";
 import { UserDocument } from "models/User.model";
 import mongoose from "mongoose";
-import { createUser, findAllUsers, findUser, issueBook, loginUser, removeIssueBook } from "service/user.service";
+import { createUser, findAllUsers, findUser, issueBook, loginUser, removeIssueBook, updateUser } from "service/user.service";
 import { logger } from "utils/logger";
 import { z } from "zod";
 
@@ -48,6 +48,18 @@ const userController = {
             logger.info(`User ${user.username} created.`)
             res.status(201).json({ status: "success", data: user });
         } catch (error: any) {
+            next(error);
+        }
+    },
+
+    /* Update User data */
+    async putUser(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { name, username, isAdmin, debt, _id } = req.body;
+            const updatedUser: UserDocument = await updateUser({ name, username, isAdmin, debt, _id });
+
+            res.status(201).json(updatedUser);
+        } catch (error) {
             next(error);
         }
     },
