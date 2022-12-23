@@ -23,3 +23,13 @@ export const findBook = async (bookName: string): Promise<Array<IBook>> => {
     if (!bookRecord) throw HttpErrorException.resourceNotFound();
     return bookRecord;
 }
+
+export const importOneBook = async (book: IBook): Promise<IBook> => {
+    const alreadyExists = await BookModel.find({ bookID: book.bookID });
+
+    if (alreadyExists) throw HttpErrorException.alreadyExists("Book already exists!")
+
+    const bookRecord: IBook = await BookModel.create(book);
+
+    return bookRecord;
+}

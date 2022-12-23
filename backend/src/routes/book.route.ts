@@ -7,5 +7,6 @@ Router.get("/import", bookController.getBooks);
 Router.get("/all", bookController.getAllBooks);
 Router.get("/search/:bookname", bookController.getBook);
 Router.get("/query", bookController.searchBooks);
+Router.post("/import/single", bookController.importSingleBook);
 
 export default Router;

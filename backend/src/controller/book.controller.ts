@@ -1,7 +1,8 @@
 import axios from "axios";
 import { NextFunction, Request, Response } from "express";
 import { IBook } from "interfaces/book.interface";
-import { fetchAllBooks, findBook, importBooks } from "service/books.service";
+import { fetchAllBooks, findBook, importBooks, importOneBook } from "service/books.service";
+import { HttpErrorException } from "exceptions/HttpErrorException";
 
 export const bookController = {
     /* Fetch and add books from frappe api to the database */
@@ -51,11 +52,22 @@ export const bookController = {
                 'Accept-Encoding': 'application/json',
             }
         })
-            .then(response => res.status(200).json(response.data))
+            .then(({ data }: { data: IBook[] }) => res.status(200).json(data))
             .catch(error => {
                 next(error);
             })
-    }
+    },
 
     // Import specific book from frappe api
+    async importSingleBook(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { book }: { book: IBook } = req.body;
+            if (!book) throw HttpErrorException.resourceNotFound("Book not found");
+
+            const response: IBook = await importOneBook(book);
+            res.status(201).json(response);
+        } catch (error) {
+            next(error);
+        }
+    }
 }
