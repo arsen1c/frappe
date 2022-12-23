@@ -12,8 +12,9 @@ import {
     Modal,
     Button,
     useMantineColorScheme,
+    Tooltip,
 } from '@mantine/core';
-import { IconPencil, IconTrash } from '@tabler/icons';
+import { IconBookUpload, IconPencil, IconTrash } from '@tabler/icons';
 import { useEffect, useState } from 'react';
 import { IIssue } from '../../../interfaces/Issue.interface';
 import { deleteRequest, getRequest } from '../../../utils/AxiosInstance';
@@ -21,6 +22,7 @@ import { IBook } from "../../../interfaces/Book.interface";
 import IssueModal from '../Modals/IssueModal';
 import { useIssueStore } from '../../../context/IssuesContext';
 import { successToast } from '../../../utils/ToastNotifications';
+import ReturnBookModal from '../Modals/ReturnBookModal';
 interface IssueModalProps {
     isOpened: boolean;
     setIsOpened(value: boolean): void;
@@ -32,14 +34,7 @@ interface ModalIssue {
     label: string;
 }[]
 
-function handleIssueSubmit(formData: { bookId: string, userId: string }) {
-    console.log("Data:", formData);
-
-}
-
 export default function IssuesTable() {
-    console.log("Rendering...");
-
     const theme = useMantineTheme();
     const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
@@ -53,7 +48,7 @@ export default function IssuesTable() {
     const [isPending, setIsPending] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
 
-    const [deleteModal, setDeleteModal] = useState({ opened: false, issueId: "" });
+    const [returnModal, setReturnModal] = useState({ opened: false, issueId: "" });
     const [issueIdSelected, setIssueIdSelected] = useState("");
     const [userIdSelected, setUserIdSelected] = useState("");
     const [editModalOpened, setEditModalOpened] = useState(false);
@@ -61,7 +56,7 @@ export default function IssuesTable() {
 
     useEffect(() => {
         fetchIssues();
-    }, [deleteModal, issueModalOpen])
+    }, [returnModal, issueModalOpen])
 
 
     function deleteIssue(issueId: string, userId: string) {
@@ -74,7 +69,7 @@ export default function IssuesTable() {
             // const newIssues = issues.filter(issue(issue => issue._id !== issueId)) => issue._id !== issueId);
             // newIssue([...newIssues]);
             removeIssue(issueId, userId);
-            setDeleteModal({ opened: false, issueId: "" });
+            setReturnModal({ opened: false, issueId: "" });
             successToast("Issue deleted");
         }).catch(err => {
             console.log(err);
@@ -116,14 +111,16 @@ export default function IssuesTable() {
             </td>
             <td>
                 <Group spacing={0} position="left">
-                    <ActionIcon color="red">
-                        <IconTrash onClick={() => {
-                            setDeleteModal({ opened: true, issueId: item._id });
-                            setIssueIdSelected(item._id);
-                            setUserIdSelected(item.userId.id);
-                        }
-                        } size={16} stroke={1.5} />
-                    </ActionIcon>
+                    <Tooltip label="Return Book" color={theme.colors.blue[4]} withArrow>
+                        <ActionIcon color="red">
+                            <IconBookUpload onClick={() => {
+                                setReturnModal({ opened: true, issueId: item._id });
+                                setIssueIdSelected(item._id);
+                                setUserIdSelected(item.userId.id);
+                            }
+                            } size={20} stroke={1.5} />
+                        </ActionIcon>
+                    </Tooltip>
                 </Group>
             </td>
         </tr>
@@ -144,10 +141,12 @@ export default function IssuesTable() {
             <ScrollArea my={50}>
                 {/* {isPending && <Center style={{ margin: 100 }}><Loader variant='dots' size={"xl"} /></Center>} */}
                 {error && <Text color={"red"}>Couldn't fetch issues: {error}</Text>}
+                {(!issues && !error) && <Center><Loader /></Center>}
                 {(issues && !isPending) &&
                     <Center style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
-                        <Modal centered opened={deleteModal.opened} withCloseButton={true} title={`Delete issue ${deleteModal.issueId}`} size="auto" onClose={() => setDeleteModal({ opened: false, issueId: "" })}>{
-                            <Button color={"red"} onClick={() => deleteIssue(issueIdSelected, userIdSelected)}>Delete</Button>
+                        <Modal centered opened={returnModal.opened} withCloseButton={true} title={`Delete issue ${returnModal.issueId}`} size="auto" onClose={() => setReturnModal({ opened: false, issueId: "" })}>{
+                            // <Button color={"red"} onClick={() => deleteIssue(issueIdSelected, userIdSelected)}>Return</Button>
+                            <ReturnBookModal issueId={issueIdSelected} userId={userIdSelected} />
                         }
                         </Modal>
                         <IssueModal isOpened={issueModalOpen} setIsOpened={setIssueModalOpen} />

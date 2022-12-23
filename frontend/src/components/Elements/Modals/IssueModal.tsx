@@ -47,7 +47,7 @@ function IssueModal({ isOpened, setIsOpened }: PorpTypes) {
     useEffect(() => {
         const fetchBooks = async (): Promise<void> => {
             // Fetch book
-            return getRequest("/book/all")
+            return getRequest<IBook[]>("/book/all")
                 .then(({ data }: { data: IBook[] }) => {
                     setIsPending(false);
                     setError("");
@@ -62,7 +62,7 @@ function IssueModal({ isOpened, setIsOpened }: PorpTypes) {
 
         const fetchUsers = async (): Promise<void> => {
             // Fetch book
-            return getRequest("/user/all")
+            return getRequest<IMember[]>("/user/all")
                 .then(({ data }: { data: IMember[] }) => {
                     setIsPending(false);
                     setError("");

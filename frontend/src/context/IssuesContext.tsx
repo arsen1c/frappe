@@ -18,7 +18,7 @@ export const useIssueStore = create<IssueState>((set) => ({
         // if (!data) throw new Error("Couldn't fetch")
 
         // set({ issues: data })
-        getRequest("/issue/all")
+        getRequest<IIssue[]>("/issue/all")
             .then(({ data }: { data: IIssue[] }) => {
                 set({ issues: data })
             }).catch(error => {
