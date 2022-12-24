@@ -26,6 +26,7 @@ import MemberModal from '../Modals/MemberModal';
 import useSWRMutation from "swr/mutation";
 import userSWR from "swr";
 import { getRequest } from '../../../utils/AxiosInstance';
+import NewMemberModal from '../Modals/NewMemberModal';
 
 interface IMemberModal {
     open: boolean;
@@ -50,6 +51,7 @@ const fetcher = (endpoint: string): Promise<IMember[]> => getRequest<IMember[]>(
 export default function MembersTable() {
     const theme = useMantineTheme();
     const [memberModalOpen, setMemberModalOpen] = useState<IMemberModal>({ open: false, member: memberFormInitialValues });
+    const [newMemberModal, setNewMemberModal] = useState(false);
 
     const { data, error, isLoading, mutate } = userSWR<IMember[]>("/user/all", fetcher);
 
@@ -111,9 +113,10 @@ export default function MembersTable() {
                 }}
             >
                 <Title>Members</Title>
-                <Button sx={{ alignSelf: "end" }} onClick={() => null}>New Member</Button>
+                <Button sx={{ alignSelf: "end" }} onClick={() => setNewMemberModal(true)}>New Member</Button>
             </Group>
             <Modal title="Edit member" opened={memberModalOpen.open} onClose={() => setMemberModalOpen({ open: false, member: memberFormInitialValues })}><MemberModal member={memberModalOpen.member} /></Modal>
+            <Modal title="Create a new Member" opened={newMemberModal} onClose={() => setNewMemberModal(false)}><NewMemberModal /></Modal>
             <ScrollArea>
                 {isLoading && <Center style={{ margin: 100 }}><Loader variant='dots' size={"xl"} /></Center>}
                 {error && <Center my={20}><Text color={"red"}>Couldn't fetch members: {error.message}</Text></Center>}
@@ -134,6 +137,6 @@ export default function MembersTable() {
                     </Center>
                 }
             </ScrollArea>
-        </div>
+        </div >
     );
 }
