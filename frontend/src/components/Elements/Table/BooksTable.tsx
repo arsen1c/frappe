@@ -15,7 +15,7 @@ import {
     TextInput,
 } from '@mantine/core';
 import { IconArrowRight, IconBookDownload, IconDots, IconPencil, IconSearch, IconTrash, IconX } from '@tabler/icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IBook } from '../../../interfaces/Book.interface';
 import { getRequest } from '../../../utils/AxiosInstance';
 import useSwr from "swr";
@@ -29,7 +29,7 @@ const importFetcher = (url: string) => getRequest<IBook[]>(url).then(res => res.
 
 export default function BooksTable() {
     const theme = useMantineTheme();
-    const { data, error, isLoading } = useSwr("/book/all", fetcher);
+    const { data, error, isLoading, mutate } = useSwr("/book/all", fetcher);
     const { trigger, error: importError, data: importBooksData, isMutating } = useSWRMutation("/book/import", importFetcher);
 
     const [searchModalOpen, setSearchModalOpen] = useState(false);
@@ -38,6 +38,10 @@ export default function BooksTable() {
         successToast("Books imported succesfully!");
     }
 
+
+    useEffect(() => {
+        mutate();
+    }, [searchModalOpen])
 
     const rows = data && data.map((item: IBook) => (
         <tr key={item._id}>
