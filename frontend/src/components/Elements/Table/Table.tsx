@@ -51,6 +51,7 @@ export default function IssuesTable() {
     const [returnModal, setReturnModal] = useState({ opened: false, issueId: "" });
     const [issueIdSelected, setIssueIdSelected] = useState("");
     const [userIdSelected, setUserIdSelected] = useState("");
+    const [userSelected, setUserSelected] = useState("");
     const [editModalOpened, setEditModalOpened] = useState(false);
     const [issueModalOpen, setIssueModalOpen] = useState(false);
 
@@ -117,6 +118,7 @@ export default function IssuesTable() {
                                 setReturnModal({ opened: true, issueId: item._id });
                                 setIssueIdSelected(item._id);
                                 setUserIdSelected(item.userId.id);
+                                setUserSelected(item.userId.username);
                             }
                             } size={20} stroke={1.5} />
                         </ActionIcon>
@@ -144,7 +146,7 @@ export default function IssuesTable() {
                 {(!issues && !error) && <Center><Loader /></Center>}
                 {(issues && !isPending) &&
                     <Center style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
-                        <Modal centered opened={returnModal.opened} withCloseButton={true} title={`Delete issue ${returnModal.issueId}`} size="auto" onClose={() => setReturnModal({ opened: false, issueId: "" })}>{
+                        <Modal centered opened={returnModal.opened} withCloseButton={true} title={`Issue return from ${userSelected}`} size="md" onClose={() => setReturnModal({ opened: false, issueId: "" })}>{
                             // <Button color={"red"} onClick={() => deleteIssue(issueIdSelected, userIdSelected)}>Return</Button>
                             <ReturnBookModal issueId={issueIdSelected} userId={userIdSelected} />
                         }

@@ -13,7 +13,7 @@ const sendRequest = async (url: string, ...args: any) => {
 function MemberModal({ member }: { member: IMember }) {
     const form = useForm<IMember>({ initialValues: { ...member } })
     const totalIssues = form.getInputProps("booksIssued");
-    const { trigger, isMutating, data, error } = useSWRMutation("/user", sendRequest);
+    const { trigger, isMutating, data, error } = useSWRMutation("/user/update", sendRequest);
 
     if (data) {
         successToast("Details Updated!")

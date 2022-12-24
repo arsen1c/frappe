@@ -35,8 +35,8 @@ function ReturnBookModal({ issueId, userId }: PropType) {
     return (
         <div>
             {error && <Center my={20} color="red"><Text color={"red"}>{error.message}</Text></Center>}
-            <Alert my={10} icon={<IconAlertCircle size={16} />} title="Note" color="red">
-                This return costs  {<IconCurrencyRupee size={13} />}50.
+            <Alert my={10} icon={<IconAlertCircle size={16} />} color="red">
+                Return costs {<IconCurrencyRupee size={13} />}50.
             </Alert>
             <Button disabled={data} loading={isMutating} onClick={() => trigger({ issueId, userId })} color="red">Return</Button>
         </div>

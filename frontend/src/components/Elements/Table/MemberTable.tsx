@@ -17,7 +17,7 @@ import {
     Tooltip,
 } from '@mantine/core';
 import { IconCurrencyRupee, IconDots, IconEdit, IconPencil, IconTrash } from '@tabler/icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useFetch } from '../../../hooks/useFetch';
 import { IMember } from '../../../interfaces/Member.interface';
 import { infoData } from '../Member/MemberInfoCard';
@@ -52,6 +52,10 @@ export default function MembersTable() {
     const [memberModalOpen, setMemberModalOpen] = useState<IMemberModal>({ open: false, member: memberFormInitialValues });
 
     const { data, error, isLoading, mutate } = userSWR<IMember[]>("/user/all", fetcher);
+
+    useEffect(() => {
+        mutate();
+    }, [memberModalOpen])
 
     const rows = data && data.map((member: IMember) => (
         <tr key={member._id}>
