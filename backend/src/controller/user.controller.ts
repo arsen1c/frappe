@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import IssueModel from "models/Issue.model";
 import { UserDocument } from "models/User.model";
 import mongoose from "mongoose";
-import { createUser, findAllUsers, findUser, issueBook, loginUser, removeIssueBook, updateUser } from "service/user.service";
+import { createUser, deleteUserAccount, findAllUsers, findUser, issueBook, loginUser, removeIssueBook, updateUser } from "service/user.service";
 import { logger } from "utils/logger";
 import { z } from "zod";
 
@@ -112,6 +112,17 @@ const userController = {
             await removeIssueBook(issueid, userid);
 
             res.status(202).send();
+        } catch (error: any) {
+            next(error);
+        }
+    },
+
+    async deleteUser(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { userid } = req.params;
+            const response = await deleteUserAccount(userid);
+
+            res.status(202).json(response);
         } catch (error: any) {
             next(error);
         }

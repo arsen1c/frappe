@@ -11,5 +11,6 @@ Router.get("/issues/:userid", userController.getIssueBook);
 Router.post("/issue", userController.postIssueBook);
 Router.delete("/issue", userController.deleteIssueBook);
 Router.put("/update", userController.putUser);
+Router.delete("/delete/:userid", userController.deleteUser);
 
 export default Router;

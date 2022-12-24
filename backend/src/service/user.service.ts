@@ -116,7 +116,7 @@ export const updateUser = async (userData: IUserUpdate): Promise<UserDocument> =
 }
 
 /* Delete issue */
-export const removeIssueBook = async (issueId: string, userId: string) => {
+export const removeIssueBook = async (issueId: mongoose.Types.ObjectId | string, userId: string) => {
     const issue = await Issue.findOne({ _id: issueId });
     if (!issue) throw HttpErrorException.resourceNotFound("Invalid issue ID");
     if (!(issue.userId.id == userId)) throw HttpErrorException.resourceNotFound("Mismatching of IssueId and UserId");
@@ -148,3 +148,19 @@ export const removeIssueBook = async (issueId: string, userId: string) => {
     return { success: true };
 }
 
+export const deleteUserAccount = async (userId: string) => {
+    const userDoc = await UserModel.findById<UserDocument>({ _id: userId });
+
+    if (!userDoc) throw HttpErrorException.resourceNotFound("User not found!");
+
+    // Populate booksIssued array with actual books
+    const userPopulated = await userDoc.populate<UserDocument>("booksIssued");
+
+    for (let i = 0; i < userPopulated.booksIssued.length; i++) {
+        await removeIssueBook(userPopulated.booksIssued[i]._id, userId);
+    }
+
+    logger.info("Books removed!.");
+    await userDoc.delete();
+    return true;
+}
