@@ -16,7 +16,7 @@ import {
     Modal,
     Tooltip,
 } from '@mantine/core';
-import { IconCurrencyRupee, IconDots, IconEdit, IconPencil, IconTrash } from '@tabler/icons';
+import { IconCurrencyRupee, IconDots, IconEdit, IconPencil, IconTrash, IconUserPlus } from '@tabler/icons';
 import { useEffect, useState } from 'react';
 import { useFetch } from '../../../hooks/useFetch';
 import { IMember } from '../../../interfaces/Member.interface';
@@ -63,7 +63,7 @@ export default function MembersTable() {
         <tr key={member._id}>
             <td>
                 <Text color={theme.black} size="sm" tt="capitalize" weight={500}>
-                    <MemberInfoICard {...infoData({ title: member.isAdmin ? "Admin" : "Member", name: member.name })} />
+                    <MemberInfoICard {...infoData({ title: member.username, name: member.name })} />
                 </Text>
             </td>
             <td>
@@ -113,7 +113,12 @@ export default function MembersTable() {
                 }}
             >
                 <Title>Members</Title>
-                <Button sx={{ alignSelf: "end" }} onClick={() => setNewMemberModal(true)}>New Member</Button>
+                {/* <Button sx={{ alignSelf: "end" }} onClick={() => setNewMemberModal(true)}></Button> */}
+                <Tooltip label="New member" color={theme.colors.blue[4]} withArrow>
+                    <ActionIcon color="blue" sx={{ alignSelf: "end" }} onClick={() => setNewMemberModal(true)}>
+                        <IconUserPlus stroke={1.5} />
+                    </ActionIcon>
+                </Tooltip>
             </Group>
             <Modal title="Edit member" opened={memberModalOpen.open} onClose={() => setMemberModalOpen({ open: false, member: memberFormInitialValues })}><MemberModal member={memberModalOpen.member} /></Modal>
             <Modal title="Create a new Member" opened={newMemberModal} onClose={() => setNewMemberModal(false)}><NewMemberModal /></Modal>

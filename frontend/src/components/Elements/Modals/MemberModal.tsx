@@ -15,10 +15,6 @@ function MemberModal({ member }: { member: IMember }) {
     const totalIssues = form.getInputProps("booksIssued");
     const { trigger, isMutating, data, error } = useSWRMutation("/user/update", sendRequest);
 
-    if (data) {
-        successToast("Details Updated!")
-    }
-
     return (
         <div>
             {error && <Text color={"red"}>{error.message}</Text>}
@@ -26,6 +22,7 @@ function MemberModal({ member }: { member: IMember }) {
             <TextInput mt="md" label="Username" placeholder="Username" {...form.getInputProps('username')} />
             <TextInput mt="md" label="Issues" placeholder="Issues" value={totalIssues.value.length} disabled={true} />
             <TextInput icon={<IconCurrencyRupee />} mt="md" label="Debt" placeholder="Debt" {...form.getInputProps('debt')} />
+            {data && <Text color={"green"}>{"Details updated!"}</Text>}
             <Button onClick={() => trigger(form.values)} my={20} loading={isMutating}>Save</Button>
         </div>
     )

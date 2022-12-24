@@ -14,7 +14,7 @@ import {
     useMantineColorScheme,
     Tooltip,
 } from '@mantine/core';
-import { IconBookUpload, IconPencil, IconTrash } from '@tabler/icons';
+import { IconBookUpload, IconFilePlus, IconPencil, IconTrash } from '@tabler/icons';
 import { useEffect, useState } from 'react';
 import { IIssue } from '../../../interfaces/Issue.interface';
 import { deleteRequest, getRequest } from '../../../utils/AxiosInstance';
@@ -138,7 +138,11 @@ export default function IssuesTable() {
                 }}
             >
                 <Title>Ongoing issues</Title>
-                <Button sx={{ alignSelf: "end" }} onClick={() => setIssueModalOpen(true)}>New issue</Button>
+                <Tooltip label="New Issue" color={theme.colors.blue[4]} withArrow>
+                    <ActionIcon sx={{ alignSelf: "end" }} color="blue" onClick={() => setIssueModalOpen(true)}>
+                        <IconFilePlus stroke={1.5} />
+                    </ActionIcon>
+                </Tooltip>
             </Group>
             <ScrollArea my={50}>
                 {/* {isPending && <Center style={{ margin: 100 }}><Loader variant='dots' size={"xl"} /></Center>} */}
