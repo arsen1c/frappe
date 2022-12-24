@@ -25,7 +25,7 @@ export const findBook = async (bookName: string): Promise<Array<IBook>> => {
 }
 
 export const importOneBook = async (book: IBook): Promise<IBook> => {
-    const alreadyExists = await BookModel.find({ bookID: book.bookID });
+    const alreadyExists = await BookModel.exists({ bookID: book.bookID });
 
     if (alreadyExists) throw HttpErrorException.alreadyExists("Book already exists!")
 
