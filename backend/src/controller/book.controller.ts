@@ -75,7 +75,7 @@ export const bookController = {
     async deleteBook(req: Request, res: Response, next: NextFunction) {
         try {
 
-            const { bookId } = req.body;
+            const { bookId } = req.params;
             const response = deleteSingleBook(bookId);
 
             res.status(202).send("Ok");
