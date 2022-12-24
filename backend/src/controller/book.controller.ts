@@ -1,7 +1,7 @@
 import axios from "axios";
 import { NextFunction, Request, Response } from "express";
 import { IBook } from "interfaces/book.interface";
-import { fetchAllBooks, findBook, importBooks, importOneBook } from "service/books.service";
+import { deleteSingleBook, fetchAllBooks, findBook, importBooks, importOneBook } from "service/books.service";
 import { HttpErrorException } from "exceptions/HttpErrorException";
 
 export const bookController = {
@@ -66,6 +66,18 @@ export const bookController = {
 
             const response: IBook = await importOneBook(book);
             res.status(201).json(response);
+        } catch (error) {
+            next(error);
+        }
+    },
+
+    // Delete a book from the database
+    async deleteBook(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { id } = req.params;
+            const response = deleteSingleBook(id);
+
+            res.status(202).send("Ok");
         } catch (error) {
             next(error);
         }

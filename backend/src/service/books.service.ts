@@ -33,3 +33,11 @@ export const importOneBook = async (book: IBook): Promise<IBook> => {
 
     return bookRecord;
 }
+
+export const deleteSingleBook = async (bookID: string): Promise<boolean> => {
+    const bookDoc = await BookModel.findOneAndDelete({ bookID });
+
+    if (!bookDoc) throw HttpErrorException.resourceNotFound("Invalid book id");
+
+    return true;
+}
