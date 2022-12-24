@@ -9,21 +9,15 @@ import {
     Title,
     Loader,
     Center,
-    Button,
-    Notification,
-    useMantineColorScheme,
-    Menu,
     Modal,
     Tooltip,
 } from '@mantine/core';
-import { IconCurrencyRupee, IconDots, IconEdit, IconPencil, IconTrash, IconUserPlus } from '@tabler/icons';
+import { IconCurrencyRupee, IconEdit, IconTrash, IconUserPlus } from '@tabler/icons';
 import { useEffect, useState } from 'react';
-import { useFetch } from '../../../hooks/useFetch';
 import { IMember } from '../../../interfaces/Member.interface';
 import { infoData } from '../Member/MemberInfoCard';
 import { MemberInfoICard } from '../Member/MemberInfoCard';
 import MemberModal from '../Modals/MemberModal';
-import useSWRMutation from "swr/mutation";
 import userSWR from "swr";
 import { getRequest } from '../../../utils/AxiosInstance';
 import NewMemberModal from '../Modals/NewMemberModal';
