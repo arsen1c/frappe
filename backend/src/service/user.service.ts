@@ -68,6 +68,7 @@ export const issueBook = async (bookID: number, userId: mongoose.Types.ObjectId)
     if (!book) throw HttpErrorException.resourceNotFound("Book not found");
     const user = await UserModel.findById(userId);
     if (!user) throw HttpErrorException.resourceNotFound("User not found");
+    if (user.debt >= 500) throw HttpErrorException.forbidden("Debt amount exhausted. Please clear your dues.");
 
     logger.info("Checking if book is already assigned to the user.")
     const oldIssueRecord: IIssue[] = await Issue.find({ "userId.id": userId });
@@ -127,6 +128,8 @@ export const removeIssueBook = async (issueId: string, userId: string) => {
     const book = await BookModel.findOne({ "bookID": issue.bookInfo.bookID });
     // increase book stock by 1
     book.stock += 1;
+    // charge a return amount. 50 rupees
+    user.debt += 50;
     // Delete issue
     await Issue.deleteOne({ _id: issueId });
 
@@ -139,6 +142,7 @@ export const removeIssueBook = async (issueId: string, userId: string) => {
     )
 
     await book.save();
+    await user.save();
 
     logger.info("Issue removed succesfully");
     return { success: true };

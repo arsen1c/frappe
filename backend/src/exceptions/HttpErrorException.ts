@@ -25,4 +25,8 @@ export class HttpErrorException extends Error {
     static alreadyExists(message: string = "Alreay exists") {
         return new HttpErrorException(403, message);
     }
+
+    static forbidden(message: string = "Forbidden") {
+        return new HttpErrorException(403, message);
+    }
 }
