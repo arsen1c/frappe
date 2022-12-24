@@ -15,13 +15,10 @@ const sendDeleteRequest = async (endpoint: string, ...args: any) => {
 function DeleteBookModal({ bookId }: PropType) {
     const { trigger, data, error, isMutating } = useSWRMutation(`/book/delete/${bookId}`, sendDeleteRequest);
 
-    if (data) {
-        successToast("Book deleted!");
-    }
-
     return (
         <div>
             {error && <Center><Text color={"red"}>{error.message}</Text></Center>}
+            {(data && !error) && <Center><Text color={"green"}>{"Book removed!"}</Text></Center>}
             <Button loading={isMutating} onClick={() => trigger({ bookId })} color="red">Delete</Button>
         </div>
     )
