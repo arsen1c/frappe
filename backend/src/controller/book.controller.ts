@@ -52,7 +52,7 @@ export const bookController = {
                 'Accept-Encoding': 'application/json',
             }
         })
-            .then(({ data }: { data: IBook[] }) => res.status(200).json(data))
+            .then(({ data: { message } }: { data: { message: IBook[] } }) => res.status(200).json(message))
             .catch(error => {
                 next(error);
             })
