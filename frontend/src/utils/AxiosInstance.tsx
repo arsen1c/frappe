@@ -1,7 +1,8 @@
 import axios from "axios";
 
 export const AxiosInstance = axios.create();
-AxiosInstance.defaults.baseURL = "http://localhost:5000"
+// AxiosInstance.defaults.baseURL = "http://localhost:5000"
+AxiosInstance.defaults.baseURL = "https://frappe.vector2912.repl.co"
 
 // GET Request
 export function getRequest<T>(endpoint: string) {
