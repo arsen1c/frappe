@@ -6,6 +6,7 @@ import {
     IconBrandGithub,
     IconBrandLinkedin,
     IconBook2,
+    IconCode,
 } from '@tabler/icons';
 import { Link } from 'react-router-dom';
 import AccountMenu from '../Elements/Menu/AccountMenu';
@@ -49,6 +50,9 @@ export default function NavbrarExample() {
                 <Group>
                     <ActionIcon size="lg" component='a' href='http://www.github.com/arsen1c'>
                         <IconBrandGithub size={40} stroke={1.5} />
+                    </ActionIcon>
+                    <ActionIcon size="lg" component='a' href='http://www.github.com/arsen1c/frappe'>
+                        <IconCode size={40} stroke={1.5} />
                     </ActionIcon>
                     <ActionIcon size="lg" component='a' href='http://www.linkedin.com/in/aashish-gajadhane'>
                         <IconBrandLinkedin href='www.youtube.com' size={40} stroke={1.5} />
