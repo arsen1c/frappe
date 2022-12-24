@@ -105,7 +105,7 @@ export default function BooksTable() {
                     </Tooltip>
                 </Group>
             </Group>
-            <Modal opened={searchModalOpen} onClose={() => setSearchModalOpen(false)} size={"lg"}><BookSearchModal /></Modal>
+            <Modal fullScreen opened={searchModalOpen} onClose={() => setSearchModalOpen(false)} size={"xl"}><BookSearchModal /></Modal>
             <ScrollArea>
                 {isLoading && <Center style={{ margin: 100 }}><Loader variant='dots' size={"xl"} /></Center>}
                 {error && <Text color={"red"}>Couldn't fetch books: {error}</Text>}

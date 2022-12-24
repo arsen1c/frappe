@@ -1,15 +1,29 @@
 import { useDebouncedValue } from "@mantine/hooks";
 import { useEffect, useState } from "react";
-import { getRequest } from "../../../utils/AxiosInstance";
+import { AxiosInstance, getRequest } from "../../../utils/AxiosInstance";
 import useSWRMutation from "swr/mutation";
-import { ActionIcon, Center, Table, Text, TextInput, Title } from "@mantine/core";
+import { ActionIcon, Center, Loader, Table, Text, TextInput, Title, Tooltip } from "@mantine/core";
 import { IconArrowRight, IconBookDownload, IconSearch } from "@tabler/icons";
 import { IBook } from "../../../interfaces/Book.interface";
+import { errorToast, successToast } from "../../../utils/ToastNotifications";
 
 const booksFetcher = (title: string) => getRequest<IBook[]>(`/book/query?title=${title}`).then(res => res.data);
+const bookImportRequest = (url: string, ...args: any) => {
+    return AxiosInstance.post(url, args[0].arg);
+}
 
 const SearchResultTable = ({ books }: { books: IBook[] }) => {
-    console.log("Books:", books);
+
+    const { trigger, data, isMutating, error } = useSWRMutation("/book/import/single", bookImportRequest)
+
+    if (data) {
+        successToast("Book imported!");
+    }
+
+    if (error) {
+        const errorMsg: string = error.response.data.message ? error.response.data.message : error.message
+        errorToast(errorMsg)
+    }
 
     const rows = books && books.map((item: IBook) => (
         <tr key={item._id}>
@@ -23,27 +37,21 @@ const SearchResultTable = ({ books }: { books: IBook[] }) => {
                     {item.title}
                 </Text>
             </td>
-            {/* <td>
-                <Text size="sm" weight={500}>
-                    {item.authors}
-                </Text>
-            </td> */}
             <td>
-                <Text size="sm">{item.stock}</Text>
+                <Tooltip label={'Import'}>
+                    <ActionIcon component="button" onClick={() => trigger({ book: item })} variant="subtle" color="blue">
+                        <IconBookDownload size={16} stroke={1.5} />
+                    </ActionIcon>
+                </Tooltip>
             </td>
-            {/* <td>
-                <ActionIcon>
-                    <IconBookDownload size={16} stroke={1.5} />
-                </ActionIcon>
-            </td> */}
-        </tr>
+        </tr >
     ));
 
     return (
-        <Table highlightOnHover sx={{ minWidth: 800, maxHeight: "1px" }} verticalSpacing="xs">
+        <Table width={"auto"} highlightOnHover verticalSpacing="xs">
             <thead>
                 <tr>
-                    <th>BookID</th>
+                    <th>ID</th>
                     <th>Title</th>
                     <th />
                 </tr>
@@ -81,8 +89,10 @@ export function BookSearchModal() {
                 value={title}
                 onChange={(e) => { setTitle(e.currentTarget.value); }}
             />
+            {isMutating && <Center my={20}><Loader /></Center>}
             <Center my={20}>
-                {data ? <SearchResultTable books={data} /> : <div>No Data</div>}
+                {error && <Text color="red">{error}</Text>}
+                {data && <SearchResultTable books={isMutating ? [] : data} />}
             </Center>
         </div>
     )
