@@ -74,9 +74,8 @@ export const bookController = {
     // Delete a book from the database
     async deleteBook(req: Request, res: Response, next: NextFunction) {
         try {
-
             const { bookId } = req.params;
-            const response = deleteSingleBook(bookId);
+            const response = await deleteSingleBook(bookId);
 
             res.status(202).send("Ok");
         } catch (error) {
