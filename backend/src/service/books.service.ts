@@ -36,7 +36,8 @@ export const importOneBook = async (book: IBook): Promise<IBook> => {
 }
 
 export const deleteSingleBook = async (bookID: string): Promise<boolean> => {
-    const isInUse = IssueModel.findOne({ "bookInfo.bookID": bookID });
+    const isInUse = await IssueModel.findOne({ "bookInfo.bookID": bookID });
+
     if (isInUse) throw HttpErrorException.forbidden("Book is in use!");
 
     const bookDoc = await BookModel.findOneAndDelete({ bookID });
