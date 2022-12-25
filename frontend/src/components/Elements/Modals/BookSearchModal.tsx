@@ -1,6 +1,6 @@
 import { useDebouncedValue } from "@mantine/hooks";
 import { useEffect, useState } from "react";
-import { AxiosInstance, getRequest } from "../../../utils/AxiosInstance";
+import { AxiosInstance, getRequest, postRequest } from "../../../utils/AxiosInstance";
 import useSWRMutation from "swr/mutation";
 import { ActionIcon, Center, Loader, Table, Text, TextInput, Title, Tooltip } from "@mantine/core";
 import { IconArrowRight, IconBookDownload, IconSearch } from "@tabler/icons";
@@ -8,21 +8,23 @@ import { IBook } from "../../../interfaces/Book.interface";
 import { errorToast, successToast } from "../../../utils/ToastNotifications";
 
 const booksFetcher = (title: string) => getRequest<IBook[]>(`/book/query?title=${title}`).then(res => res.data);
-const bookImportRequest = (url: string, ...args: any) => {
-    return AxiosInstance.post(url, args[0].arg);
-}
 
-const SearchResultTable = ({ books }: { books: IBook[] }) => {
+const SearchResultTable = ({ books, newBook }: { books: IBook[], newBook: (book: IBook) => void }) => {
+    const [loading, setLoading] = useState(false);
 
-    const { trigger, data, isMutating, error } = useSWRMutation("/book/import/single", bookImportRequest)
-
-    if (data) {
-        successToast("Book imported!");
-    }
-
-    if (error) {
-        const errorMsg: string = error.response.data.message ? error.response.data.message : error.message
-        errorToast(errorMsg)
+    const postBookData = async (book: IBook) => {
+        setLoading(true);
+        return postRequest("/book/import/single", {
+            book
+        }).then(res => {
+            newBook(res.data);
+            setLoading(false);
+            successToast("Book imported!");
+        }).catch(error => {
+            const errorMsg: string = error.response.data.message ? error.response.data.message : error.message
+            errorToast(errorMsg);
+            setLoading(false);
+        })
     }
 
     const rows = books && books.map((item: IBook) => (
@@ -39,7 +41,7 @@ const SearchResultTable = ({ books }: { books: IBook[] }) => {
             </td>
             <td>
                 <Tooltip label={'Import'}>
-                    <ActionIcon component="button" onClick={() => trigger({ book: item })} variant="subtle" color="blue">
+                    <ActionIcon component="button" onClick={() => postBookData(item)} variant="subtle" color="blue">
                         <IconBookDownload size={16} stroke={1.5} />
                     </ActionIcon>
                 </Tooltip>
@@ -55,20 +57,19 @@ const SearchResultTable = ({ books }: { books: IBook[] }) => {
                     <th>Title</th>
                     <th />
                 </tr>
+                {loading && <Center><Loader variant="dots" /></Center>}
             </thead>
             <tbody>{rows}</tbody>
         </Table>
     )
 }
 
-export function BookSearchModal() {
+export function BookSearchModal({ newBook }: { newBook: (book: IBook) => void }) {
     const [title, setTitle] = useState("");
     const [debounced] = useDebouncedValue(title, 500);
-
     const { data, error, trigger, isMutating } = useSWRMutation<IBook[]>(title, booksFetcher);
 
     useEffect(() => {
-        // trigger search request after 500
         trigger(debounced);
     }, [debounced])
 
@@ -92,7 +93,7 @@ export function BookSearchModal() {
             {isMutating && <Center my={20}><Loader /></Center>}
             <Center my={20}>
                 {error && <Text color="red">{error}</Text>}
-                {data && <SearchResultTable books={isMutating ? [] : data} />}
+                {data && <SearchResultTable books={isMutating ? [] : data} newBook={newBook} />}
             </Center>
         </div>
     )

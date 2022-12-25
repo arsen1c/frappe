@@ -1,25 +1,37 @@
 import { Button, Center, Text } from "@mantine/core";
 import { AxiosInstance } from "../../../utils/AxiosInstance";
 import useSWRMutation from "swr/mutation";
-import { successToast } from "../../../utils/ToastNotifications";
+import { errorToast, successToast } from "../../../utils/ToastNotifications";
 import { deleteRequest } from "../../../utils/AxiosInstance";
+import { useState } from "react";
 
 interface PropType {
     bookId: number;
+    removeBook: (bookId: number) => void;
+    setDeleteModalOpen: (value: boolean) => void;
 }
 
-const sendDeleteRequest = async (endpoint: string, ...args: any) => {
-    return deleteRequest(endpoint, args[0].arg);
-}
+function DeleteBookModal({ bookId, removeBook, setDeleteModalOpen }: PropType) {
+    const [loading, setLoading] = useState(false);
 
-function DeleteBookModal({ bookId }: PropType) {
-    const { trigger, data, error, isMutating } = useSWRMutation(`/book/delete/${bookId}`, sendDeleteRequest);
+    const deleteBookRequest = async () => {
+        setLoading(true);
+        deleteRequest(`/book/delete/${bookId}`, {
+            bookId
+        }).then(res => {
+            removeBook(bookId);
+            setLoading(false);
+            successToast("Book removed!");
+            setDeleteModalOpen(false);
+        }).catch(error => {
+            errorToast(error.message);
+            setLoading(false);
+        })
+    }
 
     return (
         <div>
-            {error && <Center><Text color={"red"}>{error.message}</Text></Center>}
-            {(data && !error) && <Center><Text color={"green"}>{"Book removed!"}</Text></Center>}
-            <Button loading={isMutating} onClick={() => trigger({ bookId })} color="red">Delete</Button>
+            <Button loading={loading} onClick={deleteBookRequest} color="red">Delete</Button>
         </div>
     )
 }

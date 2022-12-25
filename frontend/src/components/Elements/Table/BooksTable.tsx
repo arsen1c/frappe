@@ -24,29 +24,23 @@ import { errorToast, successToast } from '../../../utils/ToastNotifications';
 import { useDebouncedValue } from '@mantine/hooks';
 import { BookSearchModal } from '../Modals/BookSearchModal';
 import DeleteBookModal from '../Modals/DeleteBookModal';
+import { useBooksStore } from '../../../context/BooksContex';
 
 const fetcher = (url: string) => getRequest<IBook[]>(url).then(res => res.data);
 const importFetcher = (url: string) => getRequest<IBook[]>(url).then(res => res.data);
 
 export default function BooksTable() {
     const theme = useMantineTheme();
-    const { data, error, isLoading, mutate } = useSwr("/book/all", fetcher);
-    const { trigger, error: importError, data: importBooksData, isMutating } = useSWRMutation("/book/import", importFetcher);
-
+    const { books, newBook, removeBook, fetchBooks, error, loading } = useBooksStore();
     const [searchModalOpen, setSearchModalOpen] = useState(false);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [bookSelected, setBookSelected] = useState(0);
 
-    if (importBooksData) {
-        successToast("Books imported succesfully!");
-    }
-
-
     useEffect(() => {
-        mutate();
-    }, [searchModalOpen])
+        fetchBooks();
+    }, [])
 
-    const rows = data && data.map((item: IBook) => (
+    const rows = books && books.map((item: IBook) => (
         <tr key={item._id}>
             <td>
                 <Text size="sm" weight={500}>
@@ -109,20 +103,20 @@ export default function BooksTable() {
                         </ActionIcon>
                     </Tooltip>
                     <Tooltip label="Import Books" withArrow color={theme.colors.blue[4]}>
-                        <ActionIcon color="blue" loading={isMutating} onClick={trigger}>
+                        <ActionIcon color="blue" loading={loading}>
                             <IconBookDownload />
                         </ActionIcon>
                     </Tooltip>
                 </Group>
             </Group>
-            <Modal fullScreen opened={searchModalOpen} onClose={() => setSearchModalOpen(false)} size={"xl"}><BookSearchModal /></Modal>
-            <Modal opened={deleteModalOpen} onClose={() => setDeleteModalOpen(false)} size={"lg"} title={`Delete book ${bookSelected}`}><DeleteBookModal bookId={bookSelected} /></Modal>
+            <Modal fullScreen opened={searchModalOpen} onClose={() => setSearchModalOpen(false)} size={"xl"}><BookSearchModal newBook={newBook} /></Modal>
+            <Modal opened={deleteModalOpen} onClose={() => setDeleteModalOpen(false)} size={"lg"} title={`Delete book ${bookSelected}`}><DeleteBookModal removeBook={removeBook} bookId={bookSelected} setDeleteModalOpen={setDeleteModalOpen} /></Modal>
             <ScrollArea>
-                {isLoading && <Center style={{ margin: 100 }}><Loader variant='dots' size={"xl"} /></Center>}
-                {error && <Text color={"red"}>Couldn't fetch books: {error}</Text>}
-                {importError && errorToast(importError.response.data.message)}
+                {loading && <Center style={{ margin: 100 }}><Loader variant='dots' size={"xl"} /></Center>}
+                {error && <Text color={"red"}>Couldn't fetch books: {error.message}</Text>}
+                {error && errorToast(error.response.data.message)}
 
-                {(data && !isLoading) &&
+                {(books && !loading) &&
                     <Center style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
                         <Table highlightOnHover sx={{ minWidth: 800, maxHeight: "1px" }} verticalSpacing="xs">
                             <thead>
