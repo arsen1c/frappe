@@ -1,8 +1,7 @@
 import axios from "axios";
 
 export const AxiosInstance = axios.create();
-AxiosInstance.defaults.baseURL = "http://localhost:5000"
-// AxiosInstance.defaults.baseURL = "https://frappe.vector2912.repl.co"
+AxiosInstance.defaults.baseURL = import.meta.env.VITE_NODE_ENV === "development" ? import.meta.env.VITE_DEV_BASE : import.meta.env.VITE_PROD_BASE;
 
 // GET Request
 export function getRequest<T>(endpoint: string) {
