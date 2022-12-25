@@ -65,7 +65,6 @@ export default function BooksTable() {
                         </ActionIcon>
                     </Menu.Target>
                     <Menu.Dropdown>
-                        <Menu.Item icon={<IconPencil size={16} stroke={1.5} />}>Edit</Menu.Item>
                         <Menu.Item icon={<IconTrash size={16} stroke={1.5} />} color="red" onClick={() => {
                             setDeleteModalOpen(true);
                             setBookSelected(item.bookID)
