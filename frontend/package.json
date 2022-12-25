@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "cross-env VITE_NODE_ENV=development vite",
     "build": "cross-env VITE_NODE_ENV=production tsc && vite build",
-    "preview": "vite preview"
+    "preview": "cross-env VITE_NODE_ENV=production vite preview"
   },
   "dependencies": {
     "@emotion/react": "^11.10.5",
