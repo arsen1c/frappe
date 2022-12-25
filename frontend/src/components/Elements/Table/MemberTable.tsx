@@ -18,8 +18,6 @@ import { IMember } from '../../../interfaces/Member.interface';
 import { infoData } from '../Member/MemberInfoCard';
 import { MemberInfoICard } from '../Member/MemberInfoCard';
 import MemberModal from '../Modals/MemberModal';
-import userSWR from "swr";
-import { getRequest } from '../../../utils/AxiosInstance';
 import NewMemberModal from '../Modals/NewMemberModal';
 import DeleteUserModal from '../Modals/DeleteUserModal';
 import { useMembersStore } from '../../../context/MembersContext';
@@ -107,7 +105,6 @@ export default function MembersTable() {
                 }}
             >
                 <Title>Members</Title>
-                {/* <Button sx={{ alignSelf: "end" }} onClick={() => setNewMemberModal(true)}></Button> */}
                 <Tooltip label="New member" color={theme.colors.blue[4]} withArrow>
                     <ActionIcon color="blue" sx={{ alignSelf: "end" }} onClick={() => setNewMemberModal(true)}>
                         <IconUserPlus stroke={1.5} />

@@ -1,14 +1,7 @@
 import { Button, Center, Text } from '@mantine/core'
 import { useState } from 'react';
-import useSWRMutation from "swr/mutation";
-import { IMember } from '../../../interfaces/Member.interface';
 import { deleteRequest } from "../../../utils/AxiosInstance";
 import { errorToast, successToast } from '../../../utils/ToastNotifications';
-
-const sendDeleteRequest = async (endpoint: string, ...args: any) => {
-    return deleteRequest(endpoint, args[0].arg);
-}
-
 interface PropType {
     userId: string;
     removeMember: (userId: string) => void;

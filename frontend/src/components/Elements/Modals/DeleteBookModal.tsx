@@ -1,6 +1,4 @@
-import { Button, Center, Text } from "@mantine/core";
-import { AxiosInstance } from "../../../utils/AxiosInstance";
-import useSWRMutation from "swr/mutation";
+import { Button } from "@mantine/core";
 import { errorToast, successToast } from "../../../utils/ToastNotifications";
 import { deleteRequest } from "../../../utils/AxiosInstance";
 import { useState } from "react";

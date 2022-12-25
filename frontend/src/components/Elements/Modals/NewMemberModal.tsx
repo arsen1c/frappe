@@ -1,9 +1,8 @@
 import { Button, Center, Notification, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useState } from 'react';
-import useSWRMutation from "swr/mutation";
 import { IMember } from '../../../interfaces/Member.interface';
-import { AxiosInstance, postRequest } from '../../../utils/AxiosInstance';
+import { postRequest } from '../../../utils/AxiosInstance';
 import { errorToast, successToast } from '../../../utils/ToastNotifications';
 interface PropType {
     newMember: (member: IMember) => void;

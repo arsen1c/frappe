@@ -4,7 +4,6 @@ import { IconCurrencyRupee } from '@tabler/icons';
 import { IMember } from '../../../interfaces/Member.interface';
 import useSWRMutation from "swr/mutation";
 import { AxiosInstance } from '../../../utils/AxiosInstance';
-import { successToast } from '../../../utils/ToastNotifications';
 
 const sendRequest = async (url: string, ...args: any) => {
     return AxiosInstance.put(url, args[0].arg);

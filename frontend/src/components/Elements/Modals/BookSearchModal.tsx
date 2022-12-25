@@ -1,6 +1,6 @@
 import { useDebouncedValue } from "@mantine/hooks";
 import { useEffect, useState } from "react";
-import { AxiosInstance, getRequest, postRequest } from "../../../utils/AxiosInstance";
+import { getRequest, postRequest } from "../../../utils/AxiosInstance";
 import useSWRMutation from "swr/mutation";
 import { ActionIcon, Center, Loader, Table, Text, TextInput, Title, Tooltip } from "@mantine/core";
 import { IconArrowRight, IconBookDownload, IconSearch } from "@tabler/icons";

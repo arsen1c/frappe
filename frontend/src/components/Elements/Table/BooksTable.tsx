@@ -12,22 +12,14 @@ import {
     Modal,
     Menu,
     Tooltip,
-    TextInput,
 } from '@mantine/core';
-import { IconArrowRight, IconBookDownload, IconDots, IconPencil, IconSearch, IconTrash, IconX } from '@tabler/icons';
+import { IconBookDownload, IconDots, IconPencil, IconSearch, IconTrash } from '@tabler/icons';
 import { useEffect, useState } from 'react';
 import { IBook } from '../../../interfaces/Book.interface';
-import { getRequest } from '../../../utils/AxiosInstance';
-import useSwr from "swr";
-import useSWRMutation from "swr/mutation";
-import { errorToast, successToast } from '../../../utils/ToastNotifications';
-import { useDebouncedValue } from '@mantine/hooks';
+import { errorToast } from '../../../utils/ToastNotifications';
 import { BookSearchModal } from '../Modals/BookSearchModal';
 import DeleteBookModal from '../Modals/DeleteBookModal';
 import { useBooksStore } from '../../../context/BooksContex';
-
-const fetcher = (url: string) => getRequest<IBook[]>(url).then(res => res.data);
-const importFetcher = (url: string) => getRequest<IBook[]>(url).then(res => res.data);
 
 export default function BooksTable() {
     const theme = useMantineTheme();
