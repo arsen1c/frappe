@@ -5,7 +5,7 @@ import { getRequest } from "../utils/AxiosInstance";
 export interface IssueState {
     issues: IIssue[] | [],
     newIssue: (issue: IIssue) => void;
-    removeIssue: (issueId: string, userId: string) => void;
+    removeIssue: (issueId: string) => void;
     fetchIssues: () => void;
     loading: boolean;
     error: any;
@@ -16,7 +16,7 @@ export const useIssueStore = create<IssueState>((set) => ({
     loading: false,
     error: null,
     newIssue: (newIssueData: IIssue) => set((state) => ({ issues: [...state.issues, newIssueData] })),
-    removeIssue: (userId, issueId) => set((state) => ({ issues: [...state.issues.filter(issue => issue._id != issueId)] })),
+    removeIssue: (issueId: string) => set((state) => ({ issues: [...state.issues.filter(issue => issue._id != issueId)] })),
     fetchIssues: async () => {
         set({ loading: true })
         getRequest<IIssue[]>("/issue/all")

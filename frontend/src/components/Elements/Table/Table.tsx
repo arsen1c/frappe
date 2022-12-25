@@ -10,24 +10,18 @@ import {
     Loader,
     Center,
     Modal,
-    useMantineColorScheme,
     Tooltip,
 } from '@mantine/core';
 import { IconBookUpload, IconFilePlus } from '@tabler/icons';
 import { useEffect, useState } from 'react';
 import { IIssue } from '../../../interfaces/Issue.interface';
-import { deleteRequest } from '../../../utils/AxiosInstance';
 import IssueModal from '../Modals/IssueModal';
 import { useIssueStore } from '../../../context/IssuesContext';
-import { successToast } from '../../../utils/ToastNotifications';
 import ReturnBookModal from '../Modals/ReturnBookModal';
 
 export default function IssuesTable() {
     const theme = useMantineTheme();
     const { issues, newIssue, removeIssue, fetchIssues, error, loading } = useIssueStore();
-
-    // const [isPending, setIsPending] = useState<boolean>(false);
-    // const [error, setError] = useState<string>("");
 
     const [returnModal, setReturnModal] = useState({ opened: false, issueId: "" });
     const [issueIdSelected, setIssueIdSelected] = useState("");
@@ -110,7 +104,7 @@ export default function IssuesTable() {
                 {(issues && !loading) &&
                     <Center style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
                         <Modal centered opened={returnModal.opened} withCloseButton={true} title={`Issue return from ${userSelected}`} size="md" onClose={() => setReturnModal({ opened: false, issueId: "" })}>{
-                            <ReturnBookModal issueId={issueIdSelected} userId={userIdSelected} />
+                            <ReturnBookModal issueId={issueIdSelected} userId={userIdSelected} removeIssue={removeIssue} />
                         }
                         </Modal>
                         <IssueModal isOpened={issueModalOpen} setIsOpened={setIssueModalOpen} newIssue={newIssue} />

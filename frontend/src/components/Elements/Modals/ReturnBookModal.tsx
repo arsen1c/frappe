@@ -1,44 +1,43 @@
 import { Alert, Button, Center, Text } from '@mantine/core';
-import React from 'react'
 import { deleteRequest } from '../../../utils/AxiosInstance';
-import useSWRMutation from "swr/mutation";
 import { successToast } from '../../../utils/ToastNotifications';
 import { IconAlertCircle, IconCurrencyRupee } from '@tabler/icons';
+import { useState } from 'react';
 
 interface PropType {
     issueId: string;
     userId: string;
+    removeIssue: (issueId: string) => void;
 }
 
-const sendDeleteRequest = async (endpoint: string, ...args: any) => {
-    console.log("Args:", ...args);
+function ReturnBookModal({ issueId, userId, removeIssue }: PropType) {
+    const [data, setData] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
 
-
-    return deleteRequest(endpoint, {
-
-
-        data: {
-            issueid: args[0].arg.issueId,
-            userid: args[0].arg.userId,
-        }
-    }).then(res => true)
-}
-
-function ReturnBookModal({ issueId, userId }: PropType) {
-    const { trigger, data, error, isMutating } = useSWRMutation("/user/issue", sendDeleteRequest)
-
-    if (data) {
-        successToast("Book returned");
-        // handleModal(false, "");
+    const sendDeleteRequest = async () => {
+        return deleteRequest("/user/issue", {
+            data: {
+                issueid: issueId,
+                userid: userId,
+            }
+        }).then(res => {
+            setLoading(false);
+            removeIssue(issueId);
+            setData(true);
+            successToast("Issue removed!");
+        }).catch(error => {
+            setError(error.message);
+        })
     }
 
     return (
         <div>
-            {error && <Center my={20} color="red"><Text color={"red"}>{error.message}</Text></Center>}
+            {error && <Center my={20} color="red"><Text color={"red"}>{error}</Text></Center>}
             <Alert my={10} icon={<IconAlertCircle size={16} />} color="red">
                 Return costs {<IconCurrencyRupee size={13} />}50.
             </Alert>
-            <Button disabled={data} loading={isMutating} onClick={() => trigger({ issueId, userId })} color="red">Return</Button>
+            <Button disabled={data} loading={loading} onClick={() => sendDeleteRequest()} color="red">Return</Button>
         </div>
     )
 }
