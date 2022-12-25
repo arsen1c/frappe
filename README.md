@@ -17,7 +17,7 @@
 
 ## File Structure
 - Backend code can be found in [backend](https://github.com/arsen1c/frappe/tree/master/backend).
-  - This folder has the code for the REST API, which processes, stores, retreives the data.
+  - This folder has the code for the REST API, which processes, stores, retrieves the data.
   - Written in TypeScript for type safety.
 - Frontend code can be found in [frontend](https://github.com/arsen1c/frappe/tree/master/frontend).
 
@@ -34,4 +34,7 @@
 ![image](https://user-images.githubusercontent.com/46086050/209479370-38569edc-8a45-4d32-a848-14a4c13e9bea.png)
 ## Error handling
 ![image](https://user-images.githubusercontent.com/46086050/209479500-7ebbf230-2d11-42e5-a2e6-14ef37fd8359.png)
+## Dark mode
+![image](https://user-images.githubusercontent.com/46086050/209479642-dce8b7c0-43f7-4a71-89b9-2855fee35521.png)
+
 
