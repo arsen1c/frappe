@@ -63,7 +63,7 @@ export async function loginUser({ username, password }: { username: string, pass
 }
 
 /* Issue new book to the user */
-export const issueBook = async (bookID: number, userId: mongoose.Types.ObjectId): Promise<IBook> => {
+export const issueBook = async (bookID: number, userId: mongoose.Types.ObjectId): Promise<IIssue> => {
     const book = await BookModel.findOne({ bookID });
     if (!book) throw HttpErrorException.resourceNotFound("Book not found");
     const user = await UserModel.findById(userId);
@@ -101,7 +101,7 @@ export const issueBook = async (bookID: number, userId: mongoose.Types.ObjectId)
     await user.save();
     logger.info("Book issued succesfully");
 
-    return book;
+    return issue;
 }
 
 /* Update user details */
