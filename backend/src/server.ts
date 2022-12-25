@@ -21,6 +21,7 @@ app.use(
         credentials: true,
         origin: [
             'http://localhost:3000',
+            'https://frapbrary.vercel.app/'
         ],
         optionsSuccessStatus: 200,
     })
