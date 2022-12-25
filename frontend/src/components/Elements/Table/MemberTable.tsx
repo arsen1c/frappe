@@ -50,7 +50,7 @@ export default function MembersTable() {
 
     useEffect(() => {
         fetchMembers();
-    }, [])
+    }, [memberModalOpen]);
 
     const rows = members && members.map((member: IMember) => (
         <tr key={member._id}>
