@@ -24,7 +24,8 @@ function DeleteBookModal({ bookId, removeBook, setDeleteModalOpen }: PropType) {
             successToast("Book removed!");
             setDeleteModalOpen(false);
         }).catch(error => {
-            errorToast(error.message);
+            const errorMsg = error.response.data.message ? error.response.data.message : error.message;
+            errorToast(errorMsg);
             setLoading(false);
         })
     }
