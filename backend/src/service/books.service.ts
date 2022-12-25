@@ -2,6 +2,7 @@ import { IBook } from "interfaces/book.interface";
 import BookModel from "models/Book.model";
 import { HttpErrorException } from "exceptions/HttpErrorException";
 import { logger } from "utils/logger";
+import IssueModel from "models/Issue.model";
 
 /* Add the books in the database */
 export const importBooks = async (books: Array<IBook>): Promise<Array<IBook>> => {
@@ -36,6 +37,10 @@ export const importOneBook = async (book: IBook): Promise<IBook> => {
 
 export const deleteSingleBook = async (bookID: string): Promise<boolean> => {
     const bookDoc = await BookModel.findOneAndDelete({ bookID });
+
+    const isInUse = IssueModel.findOne({ "bookInfo.bookID": bookID });
+
+    if (isInUse) throw HttpErrorException.forbidden("Book is in use!");
 
     if (!bookDoc) throw HttpErrorException.resourceNotFound("Invalid book id");
 
