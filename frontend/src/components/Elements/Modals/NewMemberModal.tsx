@@ -1,15 +1,18 @@
 import { Button, Center, Notification, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { useState } from 'react';
 import useSWRMutation from "swr/mutation";
-import { AxiosInstance } from '../../../utils/AxiosInstance';
-import { successToast } from '../../../utils/ToastNotifications';
-
-const sendRequest = async (endpoint: string, ...args: any) => {
-    return AxiosInstance.post(endpoint, args[0].arg);
+import { IMember } from '../../../interfaces/Member.interface';
+import { AxiosInstance, postRequest } from '../../../utils/AxiosInstance';
+import { errorToast, successToast } from '../../../utils/ToastNotifications';
+interface PropType {
+    newMember: (member: IMember) => void;
+    setNewMemberModal: (value: boolean) => void;
 }
 
-export function NewMemberModal() {
-    const { trigger, isMutating, data, error } = useSWRMutation("/user/create", sendRequest);
+export function NewMemberModal({ newMember, setNewMemberModal }: PropType) {
+    const [loading, setLoading] = useState(false);
+
     const form = useForm({
         initialValues: {
             username: "",
@@ -17,17 +20,28 @@ export function NewMemberModal() {
         }
     })
 
-    if (!trigger && data) {
-        successToast("User created");
+    const postNewMember = async () => {
+        setLoading(true)
+        return postRequest("/user/create", {
+            ...form.values
+        }).then(res => {
+            setLoading(false);
+            newMember(res.data.data);
+            successToast("Member created");
+            setNewMemberModal(false);
+        }).catch(error => {
+            const errorMsg: string = error.response.data.message ? error.response.data.message : error.message
+            errorToast(errorMsg);
+            setLoading(false);
+        })
     }
 
     return (
         <div>
-            {error && <Center><Text color="red">{error.message}</Text></Center>}
             <TextInput label="Name" placeholder="Name" {...form.getInputProps('name')} />
             <TextInput mt="md" label="Username" placeholder="Username" {...form.getInputProps('username')} />
             <TextInput type={"password"} mt="md" label="Password" placeholder="Password" {...form.getInputProps('password')} />
-            <Button onClick={() => trigger(form.values)} loading={isMutating} my={20}>Create</Button>
+            <Button onClick={postNewMember} loading={loading} my={20}>Create</Button>
         </div>
     )
 }

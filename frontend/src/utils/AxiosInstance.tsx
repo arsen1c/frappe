@@ -14,7 +14,7 @@ export function postRequest(endpoint: string, payload: Object) {
 }
 
 // DELETE Request
-export function deleteRequest(endpoint: string, payload: Object) {
+export function deleteRequest(endpoint: string, payload?: Object) {
     return AxiosInstance.delete(endpoint, payload);
 }
 

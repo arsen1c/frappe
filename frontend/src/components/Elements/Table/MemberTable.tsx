@@ -22,6 +22,7 @@ import userSWR from "swr";
 import { getRequest } from '../../../utils/AxiosInstance';
 import NewMemberModal from '../Modals/NewMemberModal';
 import DeleteUserModal from '../Modals/DeleteUserModal';
+import { useMembersStore } from '../../../context/MembersContext';
 
 interface IMemberModal {
     open: boolean;
@@ -40,9 +41,6 @@ export const memberFormInitialValues: IMember = {
     booksIssued: [0]
 }
 
-
-const fetcher = (endpoint: string): Promise<IMember[]> => getRequest<IMember[]>(endpoint).then(({ data }: { data: IMember[] }) => data);
-
 export default function MembersTable() {
     const theme = useMantineTheme();
     const [memberModalOpen, setMemberModalOpen] = useState<IMemberModal>({ open: false, member: memberFormInitialValues });
@@ -50,13 +48,13 @@ export default function MembersTable() {
     const [deleteModalOpen, setDeleteModalOpen] = useState({ open: false, userId: "" });
     const [userSelected, setUserSelected] = useState("");
 
-    const { data, error, isLoading, mutate } = userSWR<IMember[]>("/user/all", fetcher);
+    const { members, newMember, removeMember, fetchMembers, error, loading } = useMembersStore();
 
     useEffect(() => {
-        mutate();
-    }, [memberModalOpen])
+        fetchMembers();
+    }, [])
 
-    const rows = data && data.map((member: IMember) => (
+    const rows = members && members.map((member: IMember) => (
         <tr key={member._id}>
             <td>
                 <Text color={theme.black} size="sm" tt="capitalize" weight={500}>
@@ -117,12 +115,12 @@ export default function MembersTable() {
                 </Tooltip>
             </Group>
             <Modal title="Edit member" opened={memberModalOpen.open} onClose={() => setMemberModalOpen({ open: false, member: memberFormInitialValues })}><MemberModal member={memberModalOpen.member} /></Modal>
-            <Modal title="Create a new Member" opened={newMemberModal} onClose={() => setNewMemberModal(false)}><NewMemberModal /></Modal>
-            <Modal title={`Delete user ${userSelected}`} opened={deleteModalOpen.open} onClose={() => setDeleteModalOpen({ open: false, userId: "" })}><DeleteUserModal userId={deleteModalOpen.userId} /></Modal>
+            <Modal title="Create a new Member" opened={newMemberModal} onClose={() => setNewMemberModal(false)}><NewMemberModal newMember={newMember} setNewMemberModal={setNewMemberModal} /></Modal>
+            <Modal title={`Delete user ${userSelected}`} opened={deleteModalOpen.open} onClose={() => setDeleteModalOpen({ open: false, userId: "" })}><DeleteUserModal userId={deleteModalOpen.userId} removeMember={removeMember} setDeleteModalOpen={setDeleteModalOpen} /></Modal>
             <ScrollArea>
-                {isLoading && <Center style={{ margin: 100 }}><Loader variant='dots' size={"xl"} /></Center>}
+                {loading && <Center style={{ margin: 100 }}><Loader variant='dots' size={"xl"} /></Center>}
                 {error && <Center my={20}><Text color={"red"}>Couldn't fetch members: {error.message}</Text></Center>}
-                {(data && !isLoading) &&
+                {(members && !loading) &&
                     <Center style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
                         <Table highlightOnHover sx={{ minWidth: 800, maxHeight: "1px" }} verticalSpacing="xs">
                             <thead>
