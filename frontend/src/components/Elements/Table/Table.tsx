@@ -10,74 +10,34 @@ import {
     Loader,
     Center,
     Modal,
-    Button,
     useMantineColorScheme,
     Tooltip,
 } from '@mantine/core';
-import { IconBookUpload, IconFilePlus, IconPencil, IconTrash } from '@tabler/icons';
+import { IconBookUpload, IconFilePlus } from '@tabler/icons';
 import { useEffect, useState } from 'react';
 import { IIssue } from '../../../interfaces/Issue.interface';
-import { deleteRequest, getRequest } from '../../../utils/AxiosInstance';
-import { IBook } from "../../../interfaces/Book.interface";
+import { deleteRequest } from '../../../utils/AxiosInstance';
 import IssueModal from '../Modals/IssueModal';
 import { useIssueStore } from '../../../context/IssuesContext';
 import { successToast } from '../../../utils/ToastNotifications';
 import ReturnBookModal from '../Modals/ReturnBookModal';
-interface IssueModalProps {
-    isOpened: boolean;
-    setIsOpened(value: boolean): void;
-    userId: string;
-}
-
-interface ModalIssue {
-    value: string;
-    label: string;
-}[]
 
 export default function IssuesTable() {
     const theme = useMantineTheme();
-    const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+    const { issues, newIssue, removeIssue, fetchIssues, error, loading } = useIssueStore();
 
-    // const { data, error, isPending } = useFetch("/issue/all");
-    // const {{}useIssuesContext();
-    // const [data, setData] = useState<Array<IIssue>>([]);
-    const { issues, newIssue, removeIssue, fetchIssues } = useIssueStore();
-
-
-
-    const [isPending, setIsPending] = useState<boolean>(false);
-    const [error, setError] = useState<string>("");
+    // const [isPending, setIsPending] = useState<boolean>(false);
+    // const [error, setError] = useState<string>("");
 
     const [returnModal, setReturnModal] = useState({ opened: false, issueId: "" });
     const [issueIdSelected, setIssueIdSelected] = useState("");
     const [userIdSelected, setUserIdSelected] = useState("");
     const [userSelected, setUserSelected] = useState("");
-    const [editModalOpened, setEditModalOpened] = useState(false);
     const [issueModalOpen, setIssueModalOpen] = useState(false);
 
     useEffect(() => {
         fetchIssues();
-    }, [returnModal, issueModalOpen])
-
-
-    function deleteIssue(issueId: string, userId: string) {
-        deleteRequest("/user/issue", {
-            data: {
-                issueid: issueId,
-                userid: userId
-            }
-        }).then(res => {
-            // const newIssues = issues.filter(issue(issue => issue._id !== issueId)) => issue._id !== issueId);
-            // newIssue([...newIssues]);
-            removeIssue(issueId, userId);
-            setReturnModal({ opened: false, issueId: "" });
-            successToast("Issue deleted");
-        }).catch(err => {
-            console.log(err);
-            // error =  
-
-        })
-    }
+    }, [])
 
     const rows = issues && issues.map((item: IIssue) => (
         <tr key={item._id}>
@@ -145,17 +105,15 @@ export default function IssuesTable() {
                 </Tooltip>
             </Group>
             <ScrollArea my={50}>
-                {/* {isPending && <Center style={{ margin: 100 }}><Loader variant='dots' size={"xl"} /></Center>} */}
-                {error && <Text color={"red"}>Couldn't fetch issues: {error}</Text>}
-                {(!issues && !error) && <Center><Loader /></Center>}
-                {(issues && !isPending) &&
+                {error && <Text color={"red"}>Couldn't fetch issues: {error.message}</Text>}
+                {(loading) && <Center><Loader variant='dots' /></Center>}
+                {(issues && !loading) &&
                     <Center style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
                         <Modal centered opened={returnModal.opened} withCloseButton={true} title={`Issue return from ${userSelected}`} size="md" onClose={() => setReturnModal({ opened: false, issueId: "" })}>{
-                            // <Button color={"red"} onClick={() => deleteIssue(issueIdSelected, userIdSelected)}>Return</Button>
                             <ReturnBookModal issueId={issueIdSelected} userId={userIdSelected} />
                         }
                         </Modal>
-                        <IssueModal isOpened={issueModalOpen} setIsOpened={setIssueModalOpen} />
+                        <IssueModal isOpened={issueModalOpen} setIsOpened={setIssueModalOpen} newIssue={newIssue} />
                         <Table highlightOnHover sx={{ minWidth: 800, maxHeight: "1px" }} verticalSpacing="xs">
                             <thead>
                                 <tr>

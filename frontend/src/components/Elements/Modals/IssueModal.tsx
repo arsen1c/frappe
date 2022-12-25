@@ -8,6 +8,7 @@ import { successToast } from '../../../utils/ToastNotifications';
 interface PorpTypes {
     isOpened: boolean;
     setIsOpened(value: boolean): void;
+    newIssue: (data: IIssue) => void;
 }
 
 interface ISubmit { userId: string, bookId: string }
@@ -21,7 +22,7 @@ const handleSubmit = ({ userId, bookId }: ISubmit) => {
 
 
 
-function IssueModal({ isOpened, setIsOpened }: PorpTypes) {
+function IssueModal({ isOpened, setIsOpened, newIssue }: PorpTypes) {
     const [userValue, setUserValue] = useState<string>("");
     const [bookValue, setBookValue] = useState<string>("");
     const [error, setError] = useState("");
@@ -37,7 +38,8 @@ function IssueModal({ isOpened, setIsOpened }: PorpTypes) {
             setIsPending(false);
             setError("");
             setIsOpened(false);
-            successToast("New book issued!")
+            successToast("New book issued!");
+            newIssue(data);
         }).catch(error => {
             setIsPending(false);
             setError(error.response.data.message);
