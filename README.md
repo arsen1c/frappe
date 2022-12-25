@@ -14,6 +14,25 @@
     - Charge a rent fee on book returns
     - Make sure a member’s outstanding debt is not more than Rs.500
 
+## Tech Stack
+<div align="center">
+
+  <a href="https://devdocs.io/typescript/" target="_blank">
+    <img src="https://github.com/devicons/devicon/blob/master/icons/typescript/typescript-original.svg" width="40" height="40" title="Typescript" alt="Typescript" />
+  </a>
+  <a href="https://devdocs.io/nodejs/" target="_blank">
+    <img src="https://github.com/devicons/devicon/blob/master/icons/nodejs/nodejs-original.svg" width="40" height="40" title="Nodejs" alt="Nodejs" />
+  </a>
+  <a href="https://devdocs.io/react/" target="_blank">
+    <img src="https://github.com/devicons/devicon/blob/master/icons/react/react-original.svg" width="40" height="40" title="React" alt="React" />
+  </a>
+  <a href="https://devdocs.io/mongodb/" target="_blank">
+    <img src="https://github.com/devicons/devicon/blob/master/icons/mongodb/mongodb-original.svg" width="40" height="40" title="MongoDB" alt="MongoDB" />
+  </a>
+  <a href="https://devdocs.io/express/" target="_blank">
+    <img src="https://github.com/devicons/devicon/blob/master/icons/express/express-original.svg" width="40" height="40" title="Express.js" alt="Express.js" />
+  </a>
+</div>
 
 ## File Structure
 - Backend code can be found in [backend](https://github.com/arsen1c/frappe/tree/master/backend).
