@@ -11,17 +11,6 @@ interface PorpTypes {
     newIssue: (data: IIssue) => void;
 }
 
-interface ISubmit { userId: string, bookId: string }
-
-/* Helper function */
-const handleSubmit = ({ userId, bookId }: ISubmit) => {
-    console.log("User id:", userId);
-    console.log("Book id:", bookId);
-
-}
-
-
-
 function IssueModal({ isOpened, setIsOpened, newIssue }: PorpTypes) {
     const [userValue, setUserValue] = useState<string>("");
     const [bookValue, setBookValue] = useState<string>("");
@@ -31,13 +20,14 @@ function IssueModal({ isOpened, setIsOpened, newIssue }: PorpTypes) {
     const [books, setBooks] = useState<Array<IBook> | []>([]);
 
     const postIssueData = async (): Promise<void> => {
+        setIsPending(true);
         return postRequest("/user/issue", {
             "bookid": bookValue,
             "userid": userValue
         }).then(({ data }: { data: IIssue }) => {
-            setIsPending(false);
             setError("");
             setIsOpened(false);
+            setIsPending(false);
             successToast("New book issued!");
             newIssue(data);
         }).catch(error => {
@@ -51,8 +41,8 @@ function IssueModal({ isOpened, setIsOpened, newIssue }: PorpTypes) {
             // Fetch book
             return getRequest<IBook[]>("/book/all")
                 .then(({ data }: { data: IBook[] }) => {
-                    setIsPending(false);
                     setError("");
+                    setIsPending(false);
                     setBooks(data);
                 })
                 .catch(err => {
@@ -99,7 +89,7 @@ function IssueModal({ isOpened, setIsOpened, newIssue }: PorpTypes) {
                     <option key={book._id} value={book.bookID}>{book.title}</option>
                 )}
             </Input>
-            <Button my={10} value={""} onClick={postIssueData}>Submit</Button>
+            <Button loading={isPending} my={10} value={""} onClick={postIssueData}>Submit</Button>
         </Modal >
     )
 }

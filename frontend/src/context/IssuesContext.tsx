@@ -15,7 +15,7 @@ export const useIssueStore = create<IssueState>((set) => ({
     issues: [],
     loading: false,
     error: null,
-    newIssue: (newIssueData: IIssue) => set((state) => ({ issues: [newIssueData, ...state.issues] })),
+    newIssue: (newIssueData: IIssue) => set((state) => ({ issues: [...state.issues, newIssueData] })),
     removeIssue: (userId, issueId) => set((state) => ({ issues: [...state.issues.filter(issue => issue._id != issueId)] })),
     fetchIssues: async () => {
         set({ loading: true })
