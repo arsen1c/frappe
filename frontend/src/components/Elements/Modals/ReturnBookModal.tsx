@@ -1,6 +1,6 @@
-import { Alert, Button, Center, Text } from '@mantine/core';
+import { Alert, Button } from '@mantine/core';
 import { deleteRequest } from '../../../utils/AxiosInstance';
-import { successToast } from '../../../utils/ToastNotifications';
+import { errorToast, successToast } from '../../../utils/ToastNotifications';
 import { IconAlertCircle, IconCurrencyRupee } from '@tabler/icons';
 import { useState } from 'react';
 
@@ -13,27 +13,28 @@ interface PropType {
 function ReturnBookModal({ issueId, userId, removeIssue }: PropType) {
     const [data, setData] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
 
     const sendDeleteRequest = async () => {
+        setLoading(true);
         return deleteRequest("/user/issue", {
             data: {
                 issueid: issueId,
                 userid: userId,
             }
         }).then(res => {
-            setLoading(false);
             removeIssue(issueId);
+            setLoading(false);
             setData(true);
             successToast("Issue removed!");
         }).catch(error => {
-            setError(error.message);
+            const errorMsg = error.response.data.message ? error.response.data.message : error.message;
+            errorToast(errorMsg);
+            setLoading(false);
         })
     }
 
     return (
         <div>
-            {error && <Center my={20} color="red"><Text color={"red"}>{error}</Text></Center>}
             <Alert my={10} icon={<IconAlertCircle size={16} />} color="red">
                 Return costs {<IconCurrencyRupee size={13} />}50.
             </Alert>
