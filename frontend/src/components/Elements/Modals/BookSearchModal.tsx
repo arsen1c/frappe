@@ -51,13 +51,13 @@ const SearchResultTable = ({ books, newBook }: { books: IBook[], newBook: (book:
 
     return (
         <Table width={"auto"} highlightOnHover verticalSpacing="xs">
+            {loading && <Center><Loader variant="dots" /></Center>}
             <thead>
                 <tr>
                     <th>ID</th>
                     <th>Title</th>
                     <th />
                 </tr>
-                {loading && <Center><Loader variant="dots" /></Center>}
             </thead>
             <tbody>{rows}</tbody>
         </Table>

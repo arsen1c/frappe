@@ -5,6 +5,7 @@ import { getRequest } from "../utils/AxiosInstance";
 export interface BooksState {
     books: IBook[] | [],
     newBook: (book: IBook) => void;
+    importBooks: (newBooks: IBook[]) => void;
     removeBook: (bookId: number) => void;
     fetchBooks: () => void;
     loading: boolean;
@@ -16,8 +17,8 @@ export const useBooksStore = create<BooksState>((set) => ({
     loading: false,
     error: null,
     newBook: (newBookData: IBook) => set((state) => ({ books: [...state.books, newBookData] })),
+    importBooks: (newBooks: IBook[]) => set((state) => ({ books: [...state.books, ...newBooks] })),
     removeBook: (bookId: number) => set((state) => ({ books: [...state.books.filter(book => book.bookID != bookId)] })),
-
     fetchBooks: async () => {
         set({ loading: true })
         getRequest<IBook[]>("/book/all")

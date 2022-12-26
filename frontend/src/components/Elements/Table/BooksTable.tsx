@@ -16,21 +16,37 @@ import {
 import { IconBookDownload, IconDots, IconPencil, IconSearch, IconTrash } from '@tabler/icons';
 import { useEffect, useState } from 'react';
 import { IBook } from '../../../interfaces/Book.interface';
-import { errorToast } from '../../../utils/ToastNotifications';
+import { errorToast, successToast } from '../../../utils/ToastNotifications';
 import { BookSearchModal } from '../Modals/BookSearchModal';
 import DeleteBookModal from '../Modals/DeleteBookModal';
 import { useBooksStore } from '../../../context/BooksContex';
+import { getRequest } from '../../../utils/AxiosInstance';
 
 export default function BooksTable() {
     const theme = useMantineTheme();
-    const { books, newBook, removeBook, fetchBooks, error, loading } = useBooksStore();
+    const { books, newBook, removeBook, fetchBooks, error, loading, importBooks } = useBooksStore();
     const [searchModalOpen, setSearchModalOpen] = useState(false);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [bookSelected, setBookSelected] = useState(0);
+    const [isPending, setIsPending] = useState(false);
 
     useEffect(() => {
         fetchBooks();
     }, [])
+
+    const importBooksRequest = async (): Promise<void> => {
+        setIsPending(true);
+        return getRequest<IBook[]>("/book/import")
+            .then(({ data }: { data: IBook[] }) => {
+                setIsPending(false);
+                importBooks(data);
+                successToast("Books imported!");
+            }).catch(error => {
+                const errorMsg: string = error.response.data.message ? error.response.data.message : error.message
+                errorToast(errorMsg);
+                setIsPending(false);
+            })
+    }
 
     const rows = books && books.map((item: IBook) => (
         <tr key={item._id}>
@@ -93,8 +109,8 @@ export default function BooksTable() {
                             <IconSearch />
                         </ActionIcon>
                     </Tooltip>
-                    <Tooltip label="Import Books" withArrow color={theme.colors.blue[4]}>
-                        <ActionIcon color="blue" loading={loading}>
+                    <Tooltip label="Import Books" withArrow color={theme.colors.blue[4]} >
+                        <ActionIcon onClick={importBooksRequest} color="blue" loading={isPending}>
                             <IconBookDownload />
                         </ActionIcon>
                     </Tooltip>
@@ -106,7 +122,7 @@ export default function BooksTable() {
                 {loading && <Center style={{ margin: 100 }}><Loader variant='dots' size={"xl"} /></Center>}
                 {error && <Text color={"red"}>Couldn't fetch books: {error.message}</Text>}
                 {error && errorToast(error.response.data.message)}
-
+                {!books && <Center><Text>No Data</Text></Center>}
                 {(books && !loading) &&
                     <Center style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
                         <Table highlightOnHover sx={{ minWidth: 800, maxHeight: "1px" }} verticalSpacing="xs">
