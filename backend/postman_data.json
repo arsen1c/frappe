@@ -1,25 +1,237 @@
 {
     "info": {
-        "name": "FrappeAPI",
+        "name": "Frappe",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
         "description": ""
     },
     "item": [
         {
-            "name": "Get all users",
+            "name": "Delete User",
             "request": {
-                "method": "GET",
+                "method": "DELETE",
                 "url": {
-                    "raw": "http://localhost:3000/user/all",
+                    "raw": "http://localhost:5000/user/delete/63a6e7e35a27ba5fcc359013",
                     "protocol": "http",
                     "host": [
-                        "localhost:3000"
+                        "localhost:5000"
                     ],
                     "path": [
                         "user",
-                        "all"
+                        "delete",
+                        "63a6e7e35a27ba5fcc359013"
                     ],
-                    "port": "3000"
+                    "port": "5000"
+                }
+            }
+        },
+        {
+            "name": "Delete book",
+            "request": {
+                "method": "DELETE",
+                "url": {
+                    "raw": "http://localhost:5000/book/delete/26595",
+                    "protocol": "http",
+                    "host": [
+                        "localhost:5000"
+                    ],
+                    "path": [
+                        "book",
+                        "delete",
+                        "26595"
+                    ],
+                    "port": "5000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"bookId\": \"41909\"\n}"
+                }
+            }
+        },
+        {
+            "name": "Create user",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:5000/user/create",
+                    "protocol": "http",
+                    "host": [
+                        "localhost:5000"
+                    ],
+                    "path": [
+                        "user",
+                        "create"
+                    ],
+                    "port": "5000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"name\": \"arsenic vec\",\n  \"username\": \"arsenic\",\n  \"password\": \"test\"\n}"
+                }
+            }
+        },
+        {
+            "name": "Update user data",
+            "request": {
+                "method": "PUT",
+                "url": {
+                    "raw": "http://localhost:5000/user/update",
+                    "protocol": "http",
+                    "host": [
+                        "localhost:5000"
+                    ],
+                    "path": [
+                        "user",
+                        "update"
+                    ],
+                    "port": "5000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"_id\": \"6390dce6fee761514ff8eaef\",\n  \"name\": \"arsenic vec\",\n  \"username\": \"arsenic\",\n  \"debt\": 0,\n  \"isAdmin\": true,\n  \"createdAt\": \"2022-12-07T18:35:18.836Z\",\n  \"updatedAt\": \"2022-12-23T07:22:25.492Z\",\n  \"__v\": 43\n}"
+                }
+            }
+        },
+        {
+            "name": "User login Copy",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:5000/user/login",
+                    "protocol": "http",
+                    "host": [
+                        "localhost:5000"
+                    ],
+                    "path": [
+                        "user",
+                        "login"
+                    ],
+                    "port": "5000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"username\": \"astrix\",\n  \"password\": \"test\"\n}"
+                }
+            }
+        },
+        {
+            "name": "Search user",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "http://localhost:5000/user/arsenic",
+                    "protocol": "http",
+                    "host": [
+                        "localhost:5000"
+                    ],
+                    "path": [
+                        "user",
+                        "arsenic"
+                    ],
+                    "port": "5000"
+                }
+            }
+        },
+        {
+            "name": "Import specific book",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:5000/book/import/single",
+                    "protocol": "http",
+                    "host": [
+                        "localhost:5000"
+                    ],
+                    "path": [
+                        "book",
+                        "import",
+                        "single"
+                    ],
+                    "port": "5000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"book\": {\n    \"bookID\": \"45432\",\n  \"title\": \"The Supernaturalist\",\n  \"authors\": \"Eoin Colfer\",\n  \"average_rating\": \"3.86\",\n  \"isbn\": \"078685149X\",\n  \"isbn13\": \"9780786851492\",\n  \"language_code\": \"en-US\",\n  \"  num_pages\": \"267\",\n  \"ratings_count\": \"24863\",\n  \"text_reviews_count\": \"1001\",\n  \"publication_date\": \"4/20/2005\",\n  \"publisher\": \"Disney-Hyperion\"\n  }\n}"
+                }
+            }
+        },
+        {
+            "name": "Search book on frappe",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "http://localhost:5000/book/query?title=Cars&author=Lmao",
+                    "query": [
+                        {
+                            "key": "title",
+                            "value": "Cars"
+                        },
+                        {
+                            "key": "author",
+                            "value": "Lmao"
+                        }
+                    ],
+                    "variable": [],
+                    "protocol": "http",
+                    "host": [
+                        "localhost:5000"
+                    ],
+                    "path": [
+                        "book",
+                        "query"
+                    ],
+                    "port": "5000"
+                }
+            }
+        },
+        {
+            "name": "User login",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:5000/user/login",
+                    "protocol": "http",
+                    "host": [
+                        "localhost:5000"
+                    ],
+                    "path": [
+                        "user",
+                        "login"
+                    ],
+                    "port": "5000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"username\": \"arsenic\",\n  \"password\": \"test\"\n}"
                 }
             }
         },
@@ -28,16 +240,34 @@
             "request": {
                 "method": "GET",
                 "url": {
-                    "raw": "http://localhost:3000/book/all",
+                    "raw": "http://localhost:5000/book/all",
                     "protocol": "http",
                     "host": [
-                        "localhost:3000"
+                        "localhost:5000"
                     ],
                     "path": [
                         "book",
                         "all"
                     ],
-                    "port": "3000"
+                    "port": "5000"
+                }
+            }
+        },
+        {
+            "name": "Get all users",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "http://localhost:5000/user/all",
+                    "protocol": "http",
+                    "host": [
+                        "localhost:5000"
+                    ],
+                    "path": [
+                        "user",
+                        "all"
+                    ],
+                    "port": "5000"
                 }
             }
         },
@@ -83,33 +313,6 @@
                         }
                     },
                     "raw": "{\n  \"issueid\": \"6391c6e51d1a9ee687783b6c\",\n  \"userid\": \"6391b9a0704e3ad973783823\"\n}"
-                }
-            }
-        },
-        {
-            "name": "User login Copy",
-            "request": {
-                "method": "POST",
-                "url": {
-                    "raw": "http://localhost:3000/user/login",
-                    "protocol": "http",
-                    "host": [
-                        "localhost:3000"
-                    ],
-                    "path": [
-                        "user",
-                        "login"
-                    ],
-                    "port": "3000"
-                },
-                "body": {
-                    "mode": "raw",
-                    "options": {
-                        "raw": {
-                            "language": "json"
-                        }
-                    },
-                    "raw": "{\n  \"username\": \"astrix\",\n  \"password\": \"test\"\n}"
                 }
             }
         },
@@ -168,25 +371,6 @@
             }
         },
         {
-            "name": "Get issued books  for user Copy",
-            "request": {
-                "method": "GET",
-                "url": {
-                    "raw": "http://localhost:3000/user/issues/6391b9a0704e3ad973783823",
-                    "protocol": "http",
-                    "host": [
-                        "localhost:3000"
-                    ],
-                    "path": [
-                        "user",
-                        "issues",
-                        "6391b9a0704e3ad973783823"
-                    ],
-                    "port": "3000"
-                }
-            }
-        },
-        {
             "name": "Get issued books for user",
             "request": {
                 "method": "GET",
@@ -206,33 +390,6 @@
             }
         },
         {
-            "name": "Create user",
-            "request": {
-                "method": "POST",
-                "url": {
-                    "raw": "http://localhost:3000/user/create",
-                    "protocol": "http",
-                    "host": [
-                        "localhost:3000"
-                    ],
-                    "path": [
-                        "user",
-                        "create"
-                    ],
-                    "port": "3000"
-                },
-                "body": {
-                    "mode": "raw",
-                    "options": {
-                        "raw": {
-                            "language": "json"
-                        }
-                    },
-                    "raw": "{\n  \"name\": \"astrix vec\",\n  \"username\": \"astrix\",\n  \"password\": \"test\"\n}"
-                }
-            }
-        },
-        {
             "name": "Search Book",
             "request": {
                 "method": "GET",
@@ -248,51 +405,6 @@
                         "Life"
                     ],
                     "port": "3000"
-                }
-            }
-        },
-        {
-            "name": "Search user",
-            "request": {
-                "method": "GET",
-                "url": {
-                    "raw": "http://localhost:3000/user/arsenic",
-                    "protocol": "http",
-                    "host": [
-                        "localhost:3000"
-                    ],
-                    "path": [
-                        "user",
-                        "arsenic"
-                    ],
-                    "port": "3000"
-                }
-            }
-        },
-        {
-            "name": "User login",
-            "request": {
-                "method": "POST",
-                "url": {
-                    "raw": "http://localhost:3000/user/login",
-                    "protocol": "http",
-                    "host": [
-                        "localhost:3000"
-                    ],
-                    "path": [
-                        "user",
-                        "login"
-                    ],
-                    "port": "3000"
-                },
-                "body": {
-                    "mode": "raw",
-                    "options": {
-                        "raw": {
-                            "language": "json"
-                        }
-                    },
-                    "raw": "{\n  \"username\": \"arsenic\",\n  \"password\": \"test\"\n}"
                 }
             }
         },
